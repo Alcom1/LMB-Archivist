@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.button_archive = new System.Windows.Forms.Button();
             this.textBox_output = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -294,6 +295,7 @@
             this.Controls.Add(this.archive_post_panel);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.button_archive);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(525, 475);
             this.Name = "Form1";
             this.Text = "LEGO Message Boards Archiver";
