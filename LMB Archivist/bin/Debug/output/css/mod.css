@@ -1,0 +1,7 @@
+.lia-content {
+    background-color: transparent !important;
+}
+
+.lia-message-actions.lia-component-actions, .lia-message-options {
+    display: none;
+}

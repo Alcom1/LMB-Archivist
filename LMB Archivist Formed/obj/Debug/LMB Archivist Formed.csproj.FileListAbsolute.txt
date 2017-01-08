@@ -1,0 +1,9 @@
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\LMB Archivist Formed.exe.config
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\LMB Archivist Formed.exe
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\LMB Archivist Formed.pdb
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\obj\Debug\LMB Archivist Formed.csprojResolveAssemblyReference.cache
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\obj\Debug\LMB_Archivist_Formed.Properties.Resources.resources
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\obj\Debug\LMB Archivist Formed.csproj.GenerateResource.Cache
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\obj\Debug\LMB Archivist Formed.exe
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\obj\Debug\LMB Archivist Formed.pdb
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\obj\Debug\LMB_Archivist_Formed.Form1.resources
