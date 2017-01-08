@@ -17,22 +17,25 @@ namespace LMB_Archivist_Formed
             InitializeComponent();
         }
 
-        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void archive_post_radio_CheckedChanged(object sender, EventArgs e)
         {
-
+            changeArchiveMode();
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        private void archive_topic_radio_CheckedChanged(object sender, EventArgs e)
         {
-
+            changeArchiveMode();
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void changeArchiveMode()
         {
+            this.archive_post_panel.Enabled = this.archive_post_radio.Checked;
+            this.archive_topic_panel.Enabled = this.archive_topic_radio.Checked;
 
+            this.button_archive.Enabled = true;
         }
 
-        private void label3_Click(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }
