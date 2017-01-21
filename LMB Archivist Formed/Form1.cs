@@ -34,10 +34,5 @@ namespace LMB_Archivist_Formed
 
             this.button_archive.Enabled = true;
         }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }

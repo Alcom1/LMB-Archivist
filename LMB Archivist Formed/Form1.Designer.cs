@@ -279,10 +279,11 @@
             // 
             // toolTip1
             // 
-            this.toolTip1.AutomaticDelay = 100;
-            this.toolTip1.AutoPopDelay = 8000;
-            this.toolTip1.InitialDelay = 100;
-            this.toolTip1.ReshowDelay = 20;
+            this.toolTip1.AutomaticDelay = 50;
+            this.toolTip1.AutoPopDelay = 5000;
+            this.toolTip1.InitialDelay = 50;
+            this.toolTip1.ReshowDelay = 10;
+            this.toolTip1.ShowAlways = true;
             // 
             // Form1
             // 
@@ -299,7 +300,6 @@
             this.MinimumSize = new System.Drawing.Size(525, 475);
             this.Name = "Form1";
             this.Text = "LEGO Message Boards Archiver";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.archive_post_panel.ResumeLayout(false);
