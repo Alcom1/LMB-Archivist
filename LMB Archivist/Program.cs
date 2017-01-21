@@ -8,7 +8,6 @@ using System.Web;
 using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.IO;
 
 namespace LMB_Archivist
@@ -18,7 +17,7 @@ namespace LMB_Archivist
 
     }
 
-    public class Program
+    public static class Program
     {
         //Base LMB URL
         private const string baseUrl = "https://community.lego.com/";
@@ -28,42 +27,57 @@ namespace LMB_Archivist
 
         //Save location
         private static string saveLocation = "output/";
-        
+
+        //Task Factory
+        private static TaskFactory taskFactory;
+
         //Main
         public static void Main(string[] args)
         {
+            //Task Factory
+            taskFactory = new TaskFactory();
+
             //User Id and complete URL
-            int userId = 3403995;
+            int userId = 349888;
             string completeUrl = messageUrl + userId + '/';
 
-            //Start web requests
-            Console.WriteLine("---GETTING USER POSTS. PLEASE WAIT.---\n");
-            getDocNodeFromUrlAsync(completeUrl, HandlePostListDocument);
+            //First Task
+            Task task = LMBTaskAsync(completeUrl, HandlePostListDocument);
+            task.Wait();
 
             //Press key to stop
             Console.ReadKey();
         }
 
-        //Asynchronous Web Request for LMB Document
-        private static void getDocNodeFromUrlAsync(string url, Action<IAsyncResult> action)
+        //TAP Asynchronous Web Request for LMB Document
+        private static Task<WebResponse> GetRequestStreamAsync(this WebRequest request)
         {
+            return taskFactory.FromAsync(request.BeginGetResponse, request.EndGetResponse, null);
+        }
+
+        //General LMB Request Task
+        private static async Task LMBTaskAsync(string url, Action<HtmlNode, string> action)
+        {
+
             var request = (System.Net.HttpWebRequest)WebRequest.Create(url);
             request.CookieContainer = new CookieContainer();
 
-            IAsyncResult asyncResult = (IAsyncResult)request.BeginGetResponse(new AsyncCallback(action), request);
-        }
+            Task<WebResponse> task = GetRequestStreamAsync(request);
 
-        //Handle post-list page from web request.
-        private static void HandlePostListDocument(IAsyncResult result)
-        {
             //Read the document from the request result
             var doc = new HtmlDocument();   //Document
-            WebResponse webResponse = ((HttpWebRequest)result.AsyncState).GetResponse();
+            WebResponse webResponse = await task;
             doc.Load(webResponse.GetResponseStream());
             webResponse.Close();
 
             var docNode = doc.DocumentNode; //Document Node
 
+            action(docNode, url);
+        }
+
+        //Handle post-list page from web request.
+        private static async void HandlePostListDocument(HtmlNode docNode, string url)
+        {
             //Set Save Location based on username
             saveLocation = "output/" + docNode.QuerySelector("a.lia-user-name-link").FirstChild.InnerHtml + "/";
             Directory.CreateDirectory(saveLocation);
@@ -72,15 +86,15 @@ namespace LMB_Archivist
             foreach (var item in docNode.QuerySelectorAll("span.lia-message-unread"))
             {
                 var itemAnchor = item.QuerySelectorAll("a").ToList()[0];
-                
-                getDocNodeFromUrlAsync(baseUrl + itemAnchor.GetAttributeValue("href", ""), HandlePostDocument);
+
+                Task taskPost = LMBTaskAsync(baseUrl + itemAnchor.GetAttributeValue("href", ""), HandlePostDocument);
             }
 
             //Node containing link for the next post-list
             var next = docNode.QuerySelector("li.lia-paging-page-next").QuerySelector("a.lia-link-navigation");
 
             //Return if no list page after this one
-            if(next == null)
+            if (next == null)
             {
                 return;
             }
@@ -99,22 +113,13 @@ namespace LMB_Archivist
             }
 
             //Get the next list page
-            getDocNodeFromUrlAsync(next.GetAttributeValue("href", ""), HandlePostListDocument);
+            Task taskNextPage = LMBTaskAsync(next.GetAttributeValue("href", ""), HandlePostListDocument);
         }
 
         //Handle post page from web request
-        private static void HandlePostDocument(IAsyncResult result)
+        private static void HandlePostDocument(HtmlNode docNode, string url)
         {
-            //Read the document from the request result
-            var doc = new HtmlDocument();   //Document
-            WebResponse webResponse = ((HttpWebRequest)result.AsyncState).GetResponse();
-            doc.Load(webResponse.GetResponseStream());
-            webResponse.Close();
-
-            var docNode = doc.DocumentNode; //Document Node
-
-            //Neumerical ID for post
-            var postId = Regex.Match(((HttpWebRequest)result.AsyncState).Address.ToString(), @"m-p\/\d+").Value.Replace("m-p/", "");
+            var postId = Regex.Match(url, @"m-p\/\d+").Value.Replace("m-p/", "");
 
             Console.WriteLine("---GETTING POST OF ID: " + postId + "---\n");
 
