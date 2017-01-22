@@ -25,7 +25,10 @@ namespace LMB_Archivist
         //URL For LMB user's posts
         private const string messageUrl = "https://community.lego.com/t5/forums/recentpostspage/post-type/message/user-id/";
 
-        //Save location
+        //Save location for image assets
+        private static string saveImageLocation = "images/";
+
+        //Save location for posts
         private static string saveLocation = "output/";
 
         //Task Factory
@@ -42,8 +45,8 @@ namespace LMB_Archivist
             string completeUrl = messageUrl + userId + '/';
 
             //First Task
-            Task task = LMBTaskAsync(completeUrl, HandlePostListDocument);
-            task.Wait();
+            Console.WriteLine("---GETTING POST PAGE NUMBER 1---\n");
+            StartWebRequest(completeUrl, HandlePostListDocument);
 
             //Press key to stop
             Console.ReadKey();
@@ -56,28 +59,27 @@ namespace LMB_Archivist
         }
 
         //General LMB Request Task
-        private static async Task LMBTaskAsync(string url, Action<HtmlNode, string> action)
+        private static async void StartWebRequest(string url, Action<WebResponse, string> action)
         {
-
             var request = (System.Net.HttpWebRequest)WebRequest.Create(url);
             request.CookieContainer = new CookieContainer();
-
             Task<WebResponse> task = GetRequestStreamAsync(request);
 
             //Read the document from the request result
-            var doc = new HtmlDocument();   //Document
             WebResponse webResponse = await task;
+            
+            await Task.Run(() => action(webResponse, url));
+        }
+
+        //Handle post-list page from web request.
+        private static void HandlePostListDocument(WebResponse webResponse, string url)
+        {
+            var doc = new HtmlDocument();   //Document
             doc.Load(webResponse.GetResponseStream());
             webResponse.Close();
 
             var docNode = doc.DocumentNode; //Document Node
 
-            action(docNode, url);
-        }
-
-        //Handle post-list page from web request.
-        private static async void HandlePostListDocument(HtmlNode docNode, string url)
-        {
             //Set Save Location based on username
             saveLocation = "output/" + docNode.QuerySelector("a.lia-user-name-link").FirstChild.InnerHtml + "/";
             Directory.CreateDirectory(saveLocation);
@@ -86,8 +88,7 @@ namespace LMB_Archivist
             foreach (var item in docNode.QuerySelectorAll("span.lia-message-unread"))
             {
                 var itemAnchor = item.QuerySelectorAll("a").ToList()[0];
-
-                Task taskPost = LMBTaskAsync(baseUrl + itemAnchor.GetAttributeValue("href", ""), HandlePostDocument);
+                var itemTask = Task.Factory.StartNew(() => StartWebRequest(baseUrl + itemAnchor.GetAttributeValue("href", ""), HandlePostDocument));
             }
 
             //Node containing link for the next post-list
@@ -106,22 +107,29 @@ namespace LMB_Archivist
                 if (cssClass.StartsWith("lia-js-data-pageNum-"))
                 {
                     int pageNumber = 0;
-                    Int32.TryParse(cssClass[cssClass.Length - 1].ToString(), out pageNumber);
+                    Int32.TryParse(Regex.Match(cssClass, @"\d+$").Value, out pageNumber);
 
                     Console.WriteLine("---GETTING POST PAGE NUMBER " + pageNumber + "---\n");
                 }
             }
 
             //Get the next list page
-            Task taskNextPage = LMBTaskAsync(next.GetAttributeValue("href", ""), HandlePostListDocument);
+            StartWebRequest(next.GetAttributeValue("href", ""), HandlePostListDocument);
         }
 
         //Handle post page from web request
-        private static void HandlePostDocument(HtmlNode docNode, string url)
+        private static void HandlePostDocument(WebResponse webResponse, string url)
         {
+            //Read the document from the request result
+            var doc = new HtmlDocument();   //Document
+            doc.Load(webResponse.GetResponseStream());
+            webResponse.Close();
+
+            var docNode = doc.DocumentNode; //Document Node
+
             var postId = Regex.Match(url, @"m-p\/\d+").Value.Replace("m-p/", "");
 
-            Console.WriteLine("---GETTING POST OF ID: " + postId + "---\n");
+            Console.WriteLine("---ACQUIRED POST OF ID: " + postId + "---\n");
 
             //Node of post
             var post = docNode.QuerySelector("div.message-uid-" + postId);
@@ -130,6 +138,23 @@ namespace LMB_Archivist
             post.QuerySelector("div.lia-quilt-column-main-right")
                 .QuerySelector("div.lia-quilt-column-alley")
                 .Attributes["class"].Value = "lia-quilt-column-alley lia-quilt-column-alley-left";
+            
+            var images = post.QuerySelectorAll("img");
+
+            //Get images and set the src for them, but not in that order.
+            foreach (HtmlNode image in images)
+            {
+                var src = image.GetAttributeValue("src", "");
+
+                string imageFileLocation = saveImageLocation + System.IO.Path.GetFileName(src);
+
+                image.SetAttributeValue("src", "../" + imageFileLocation);
+
+                if (!File.Exists("output/" + imageFileLocation))
+                {
+                    var imageTask = Task.Factory.StartNew(() => StartWebRequest(src, HandleImageAsset));
+                }
+            }
 
             //Date of post
             var date = GetDateFromNode(post);
@@ -145,6 +170,20 @@ namespace LMB_Archivist
             output.Load("assets/default.html");
             output.DocumentNode.QuerySelector("div.even-row").AppendChild(post);
             output.Save(saveLocation + legalizeFilePath(date + "_" + postId + "_" + title + "_" + subject) + ".html");
+        }
+
+        //Write Image from Web Response
+        private static void HandleImageAsset(WebResponse webResponse, string url)
+        {
+            //I don't know, I just copied this off Stack Overflow and it works.
+            using (BinaryReader reader = new BinaryReader(webResponse.GetResponseStream()))
+            {
+                Byte[] lnByte = reader.ReadBytes(1 * 1024 * 1024 * 10);
+                using (FileStream lxFS = new FileStream("output/" + saveImageLocation + System.IO.Path.GetFileName(url), FileMode.Create))
+                {
+                    lxFS.Write(lnByte, 0, lnByte.Length);
+                }
+            }
         }
 
         //Replace illegal characters in given file path
@@ -176,11 +215,11 @@ namespace LMB_Archivist
                     " " +
                     dateContainer.QuerySelector("span.local-time").InnerHtml).Remove(0, 3);
             }
-            
+
             //Standardize Date
-            if(date != String.Empty)
+            if (date != String.Empty)
             {
-                date = DateTime.Parse(date).ToString("yyyy-mm-dd hh\uA789mm");
+                date = DateTime.Parse(date).ToString("yyyy-mm-dd hh\uA789mm");  //It's a colon, if you're wondering.
             }
             else
             {
