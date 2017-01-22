@@ -114,7 +114,7 @@ namespace LMB_Archivist
             }
 
             //Get the next list page
-            StartWebRequest(next.GetAttributeValue("href", ""), HandlePostListDocument);
+            var nextPageTask = Task.Factory.StartNew(() => StartWebRequest(next.GetAttributeValue("href", ""), HandlePostListDocument));
         }
 
         //Handle post page from web request
