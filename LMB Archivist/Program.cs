@@ -46,35 +46,27 @@ namespace LMB_Archivist
 
             //First Task
             Console.WriteLine("---GETTING POST PAGE NUMBER 1---\n");
-            StartWebRequest(completeUrl, HandlePostListDocument);
+            HandlePostListDocument(completeUrl);
 
             //Press key to stop
             Console.ReadKey();
         }
 
         //TAP Asynchronous Web Request for LMB Document
-        private static Task<WebResponse> GetRequestStreamAsync(this WebRequest request)
-        {
-            return taskFactory.FromAsync(request.BeginGetResponse, request.EndGetResponse, null);
-        }
-
-        //General LMB Request Task
-        private static async void StartWebRequest(string url, Action<WebResponse, string> action)
+        private async static Task<WebResponse> GetRequestStreamAsync(string url)
         {
             var request = (System.Net.HttpWebRequest)WebRequest.Create(url);
             request.CookieContainer = new CookieContainer();
-            Task<WebResponse> task = GetRequestStreamAsync(request);
 
-            //Read the document from the request result
-            WebResponse webResponse = await task;
-            
-            await Task.Run(() => action(webResponse, url));
+            Task<WebResponse> task = taskFactory.FromAsync(request.BeginGetResponse, request.EndGetResponse, null);
+            return await task;
         }
 
         //Handle post-list page from web request.
-        private static void HandlePostListDocument(WebResponse webResponse, string url)
+        private static async void HandlePostListDocument(string url)
         {
             var doc = new HtmlDocument();   //Document
+            var webResponse = await GetRequestStreamAsync(url);
             doc.Load(webResponse.GetResponseStream());
             webResponse.Close();
 
@@ -87,8 +79,15 @@ namespace LMB_Archivist
             //Start web requests for each post on the list
             foreach (var item in docNode.QuerySelectorAll("span.lia-message-unread"))
             {
-                var itemAnchor = item.QuerySelectorAll("a").ToList()[0];
-                var itemTask = Task.Factory.StartNew(() => StartWebRequest(baseUrl + itemAnchor.GetAttributeValue("href", ""), HandlePostDocument));
+                //Deleted topics don't have an anchor so there might not be one. Skip it if it has none.
+                var itemAnchor = item.QuerySelector("a");
+
+                if (itemAnchor != null)
+                {
+                    #pragma warning disable 4014
+                    Task.Run(() => HandlePostDocument(baseUrl + itemAnchor.GetAttributeValue("href", ""))).ConfigureAwait(false);
+                    #pragma warning restore 4014
+                }
             }
 
             //Node containing link for the next post-list
@@ -114,14 +113,17 @@ namespace LMB_Archivist
             }
 
             //Get the next list page
-            var nextPageTask = Task.Factory.StartNew(() => StartWebRequest(next.GetAttributeValue("href", ""), HandlePostListDocument));
+            #pragma warning disable 4014
+            Task.Run(() => HandlePostListDocument(next.GetAttributeValue("href", ""))).ConfigureAwait(false);
+            #pragma warning restore 4014
         }
 
         //Handle post page from web request
-        private static void HandlePostDocument(WebResponse webResponse, string url)
+        private static async void HandlePostDocument(string url)
         {
             //Read the document from the request result
             var doc = new HtmlDocument();   //Document
+            var webResponse = await GetRequestStreamAsync(url);
             doc.Load(webResponse.GetResponseStream());
             webResponse.Close();
 
@@ -134,11 +136,17 @@ namespace LMB_Archivist
             //Node of post
             var post = docNode.QuerySelector("div.message-uid-" + postId);
 
+            if (post == null)
+            {
+                Console.WriteLine("---POST OF ID: " + postId + " REQUIRES LOGIN. CANNOT GET.---\n");
+                return; //Post requires login. Ignore it.
+            }
+
             //Modify post document for exporting
             post.QuerySelector("div.lia-quilt-column-main-right")
                 .QuerySelector("div.lia-quilt-column-alley")
                 .Attributes["class"].Value = "lia-quilt-column-alley lia-quilt-column-alley-left";
-            
+
             var images = post.QuerySelectorAll("img");
 
             //Get images and set the src for them, but not in that order.
@@ -152,7 +160,9 @@ namespace LMB_Archivist
 
                 if (!File.Exists("output/" + imageFileLocation))
                 {
-                    var imageTask = Task.Factory.StartNew(() => StartWebRequest(src, HandleImageAsset));
+                    #pragma warning disable 4014
+                    Task.Run(() => HandleImageAsset(src)).ConfigureAwait(false);
+                    #pragma warning restore 4014
                 }
             }
 
@@ -173,8 +183,10 @@ namespace LMB_Archivist
         }
 
         //Write Image from Web Response
-        private static void HandleImageAsset(WebResponse webResponse, string url)
+        private static async void HandleImageAsset(string url)
         {
+            var webResponse = await GetRequestStreamAsync(url);
+
             //I don't know, I just copied this off Stack Overflow and it works.
             using (BinaryReader reader = new BinaryReader(webResponse.GetResponseStream()))
             {
