@@ -34,6 +34,9 @@ namespace LMB_Archivist
         //Task Factory
         private static TaskFactory taskFactory;
 
+        //Lock
+        private static Object locker = new Object();
+
         //Main
         public static void Main(string[] args)
         {
@@ -72,9 +75,17 @@ namespace LMB_Archivist
 
             var docNode = doc.DocumentNode; //Document Node
 
-            //Set Save Location based on username
-            saveLocation = "output/" + docNode.QuerySelector("a.lia-user-name-link").FirstChild.InnerHtml + "/";
-            Directory.CreateDirectory(saveLocation);
+            //Set Save Location based on username, but only for the first page
+            if (!Regex.Match(url, @"\d+$").Success)
+            {
+                var userName = docNode.QuerySelector("a.lia-user-name-link").FirstChild.InnerHtml;
+                saveLocation = "output/" + userName + "/";
+                Directory.CreateDirectory(saveLocation);
+                var overview = new HtmlDocument();
+                overview.Load("assets/overview.html");
+                overview.DocumentNode.QuerySelector("h1").InnerHtml += "Posts For " + userName;
+                overview.Save(saveLocation + "overview.html");
+            }
 
             //Start web requests for each post on the list
             foreach (var item in docNode.QuerySelectorAll("span.lia-message-unread"))
@@ -172,19 +183,39 @@ namespace LMB_Archivist
             //Title of post
             var title = docNode.QuerySelector("h3.custom-title").InnerHtml.Trim('"');
 
-            //Subject of post
-            var subject = post.QuerySelector("div.lia-message-subject").FirstChild.InnerHtml;
+            //Subject of post (unused)
+            //var subject = post.QuerySelector("div.lia-message-subject").ChildNodes[1].InnerHtml;
+
+            //Post File Name
+            string postFileName = legalizeFilePath(date + "_" + postId + "_" + title) + ".html";
+            
+            //Prevent interuption when writing post overview
+            lock(locker)
+            {
+                //Save overview document
+                var overview = new HtmlDocument();
+                overview.Load(saveLocation + "overview.html", Encoding.UTF8);
+                overview.DocumentNode.QuerySelector("ul").InnerHtml +=
+                    "<li><a href=\"" + postFileName + "\">" + postFileName + "</a></li>\n";
+                overview.Save(saveLocation + "overview.html", Encoding.UTF8);
+            }
 
             //Save post document
             var output = new HtmlDocument();
             output.Load("assets/default.html");
             output.DocumentNode.QuerySelector("div.even-row").AppendChild(post);
-            output.Save(saveLocation + legalizeFilePath(date + "_" + postId + "_" + title + "_" + subject) + ".html");
+            output.Save(saveLocation + postFileName);
         }
 
         //Write Image from Web Response
         private static async void HandleImageAsset(string url)
         {
+            //Compatibility for older LMB emotes that still hang around for SOME reason.
+            if(url.StartsWith("/html/"))
+            {
+                url = baseUrl + url;
+            }
+
             var webResponse = await GetRequestStreamAsync(url);
 
             //I don't know, I just copied this off Stack Overflow and it works.
@@ -231,7 +262,7 @@ namespace LMB_Archivist
             //Standardize Date
             if (date != String.Empty)
             {
-                date = DateTime.Parse(date).ToString("yyyy-mm-dd hh\uA789mm");  //It's a colon, if you're wondering.
+                date = DateTime.Parse(date).ToString("yyyy-MM-dd HH\uA789mm");  //It's a colon, if you're wondering.
             }
             else
             {
