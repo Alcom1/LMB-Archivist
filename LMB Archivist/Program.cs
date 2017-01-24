@@ -26,16 +26,20 @@ namespace LMB_Archivist
         private const string messageUrl = "https://community.lego.com/t5/forums/recentpostspage/post-type/message/user-id/";
 
         //Save location for image assets
-        private static string saveImageLocation = "images/";
+        private const string saveImageLocation = "images/";
 
         //Save location for posts
-        private static string saveLocation = "output/";
+        private const string saveLocation = "output/";
+
+        //Save location for posts
+        private static string username;
 
         //Task Factory
         private static TaskFactory taskFactory;
 
-        //Lock
-        private static Object locker = new Object();
+        //Locks
+        private static Object lockerPost = new Object();
+        private static Object lockerImage = new Object();
 
         //Main
         public static void Main(string[] args)
@@ -78,13 +82,12 @@ namespace LMB_Archivist
             //Set Save Location based on username, but only for the first page
             if (!Regex.Match(url, @"\d+$").Success)
             {
-                var userName = docNode.QuerySelector("a.lia-user-name-link").FirstChild.InnerHtml;
-                saveLocation = "output/" + userName + "/";
-                Directory.CreateDirectory(saveLocation);
+                username = docNode.QuerySelector("a.lia-user-name-link").FirstChild.InnerHtml;
+                Directory.CreateDirectory(saveLocation + username + "/");
                 var overview = new HtmlDocument();
                 overview.Load("assets/overview.html");
-                overview.DocumentNode.QuerySelector("h1").InnerHtml += "Posts For " + userName;
-                overview.Save(saveLocation + "overview.html");
+                overview.DocumentNode.QuerySelector("h1").InnerHtml += "Posts For " + username;
+                overview.Save(saveLocation + "overview-" + username + ".html");
             }
 
             //Start web requests for each post on the list
@@ -190,21 +193,21 @@ namespace LMB_Archivist
             string postFileName = legalizeFilePath(date + "_" + postId + "_" + title) + ".html";
             
             //Prevent interuption when writing post overview
-            lock(locker)
+            lock(lockerPost)
             {
                 //Save overview document
                 var overview = new HtmlDocument();
-                overview.Load(saveLocation + "overview.html", Encoding.UTF8);
+                overview.Load(saveLocation + "overview-" + username + ".html", Encoding.UTF8);
                 overview.DocumentNode.QuerySelector("ul").InnerHtml +=
-                    "<li><a href=\"" + postFileName + "\">" + postFileName + "</a></li>\n";
-                overview.Save(saveLocation + "overview.html", Encoding.UTF8);
+                    "<li><a href=\"" + username + "/" + postFileName + "\">" + postFileName + "</a></li>\n";
+                overview.Save(saveLocation + "overview-" + username + ".html", Encoding.UTF8);
             }
 
             //Save post document
             var output = new HtmlDocument();
             output.Load("assets/default.html");
             output.DocumentNode.QuerySelector("div.even-row").AppendChild(post);
-            output.Save(saveLocation + postFileName);
+            output.Save(saveLocation + username + "/" + postFileName);
         }
 
         //Write Image from Web Response
@@ -218,13 +221,17 @@ namespace LMB_Archivist
 
             var webResponse = await GetRequestStreamAsync(url);
 
-            //I don't know, I just copied this off Stack Overflow and it works.
-            using (BinaryReader reader = new BinaryReader(webResponse.GetResponseStream()))
+            //Prevent interuption when writing post image
+            lock (lockerImage)
             {
-                Byte[] lnByte = reader.ReadBytes(1 * 1024 * 1024 * 10);
-                using (FileStream lxFS = new FileStream("output/" + saveImageLocation + System.IO.Path.GetFileName(url), FileMode.Create))
+                //I don't know, I just copied this off Stack Overflow and it works.
+                using (BinaryReader reader = new BinaryReader(webResponse.GetResponseStream()))
                 {
-                    lxFS.Write(lnByte, 0, lnByte.Length);
+                    Byte[] lnByte = reader.ReadBytes(1 * 1024 * 1024 * 10);
+                    using (FileStream lxFS = new FileStream("output/" + saveImageLocation + System.IO.Path.GetFileName(url), FileMode.Create))
+                    {
+                        lxFS.Write(lnByte, 0, lnByte.Length);
+                    }
                 }
             }
         }
