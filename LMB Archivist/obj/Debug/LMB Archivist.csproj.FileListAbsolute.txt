@@ -27,3 +27,15 @@ C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\HtmlAgility
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\HtmlAgilityPack.xml
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Fizzler.xml
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\obj\Debug\LMB Archivist.csprojResolveAssemblyReference.cache
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\avatar-author-bg.png
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\blue-button-bg.png
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\body-bg.png
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\browse-forum-bg.png
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\like.png
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\speech-triangle-left.png
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\blob.css
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\main.css
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\mod.css
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\overview.css
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Assets\default.html
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Assets\overview.html

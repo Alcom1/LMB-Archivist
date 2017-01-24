@@ -9,6 +9,7 @@ using HtmlAgilityPack;
 using Fizzler.Systems.HtmlAgilityPack;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Reflection;
 
 namespace LMB_Archivist
 {
@@ -20,18 +21,21 @@ namespace LMB_Archivist
     public static class Program
     {
         //Base LMB URL
-        private const string baseUrl = "https://community.lego.com/";
+        private const string BASE_URL = "https://community.lego.com/";
 
         //URL For LMB user's posts
-        private const string messageUrl = "https://community.lego.com/t5/forums/recentpostspage/post-type/message/user-id/";
+        private const string MESSAGE_URL = "https://community.lego.com/t5/forums/recentpostspage/post-type/message/user-id/";
+
+        //Asset location
+        private const string ASSET_LOCATION = "assets/";
 
         //Save location for image assets
-        private const string saveImageLocation = "images/";
+        private const string SAVE_IMAGE_LOCATION = "images/";
 
         //Save location for posts
-        private const string saveLocation = "output/";
+        private const string SAVE_LOCATION = "output/";
 
-        //Save location for posts
+        //Username
         private static string username;
 
         //Task Factory
@@ -49,7 +53,7 @@ namespace LMB_Archivist
 
             //User Id and complete URL
             int userId = 349888;
-            string completeUrl = messageUrl + userId + '/';
+            string completeUrl = MESSAGE_URL + userId + '/';
 
             //First Task
             Console.WriteLine("---GETTING POST PAGE NUMBER 1---\n");
@@ -83,11 +87,11 @@ namespace LMB_Archivist
             if (!Regex.Match(url, @"\d+$").Success)
             {
                 username = docNode.QuerySelector("a.lia-user-name-link").FirstChild.InnerHtml;
-                Directory.CreateDirectory(saveLocation + username + "/");
+                Directory.CreateDirectory(SAVE_LOCATION + username + "/");
                 var overview = new HtmlDocument();
                 overview.Load("assets/overview.html");
                 overview.DocumentNode.QuerySelector("h1").InnerHtml += "Posts For " + username;
-                overview.Save(saveLocation + "overview-" + username + ".html");
+                overview.Save(SAVE_LOCATION + "overview-" + username + ".html");
             }
 
             //Start web requests for each post on the list
@@ -99,7 +103,7 @@ namespace LMB_Archivist
                 if (itemAnchor != null)
                 {
                     #pragma warning disable 4014
-                    Task.Run(() => HandlePostDocument(baseUrl + itemAnchor.GetAttributeValue("href", ""))).ConfigureAwait(false);
+                    Task.Run(() => HandlePostDocument(BASE_URL + itemAnchor.GetAttributeValue("href", ""))).ConfigureAwait(false);
                     #pragma warning restore 4014
                 }
             }
@@ -168,7 +172,7 @@ namespace LMB_Archivist
             {
                 var src = image.GetAttributeValue("src", "");
 
-                string imageFileLocation = saveImageLocation + System.IO.Path.GetFileName(src);
+                string imageFileLocation = SAVE_IMAGE_LOCATION + System.IO.Path.GetFileName(src);
 
                 image.SetAttributeValue("src", "../" + imageFileLocation);
 
@@ -197,17 +201,17 @@ namespace LMB_Archivist
             {
                 //Save overview document
                 var overview = new HtmlDocument();
-                overview.Load(saveLocation + "overview-" + username + ".html", Encoding.UTF8);
+                overview.Load(SAVE_LOCATION + "overview-" + username + ".html", Encoding.UTF8);
                 overview.DocumentNode.QuerySelector("ul").InnerHtml +=
                     "<li><a href=\"" + username + "/" + postFileName + "\">" + postFileName + "</a></li>\n";
-                overview.Save(saveLocation + "overview-" + username + ".html", Encoding.UTF8);
+                overview.Save(SAVE_LOCATION + "overview-" + username + ".html", Encoding.UTF8);
             }
 
             //Save post document
             var output = new HtmlDocument();
             output.Load("assets/default.html");
             output.DocumentNode.QuerySelector("div.even-row").AppendChild(post);
-            output.Save(saveLocation + username + "/" + postFileName);
+            output.Save(SAVE_LOCATION + username + "/" + postFileName);
         }
 
         //Write Image from Web Response
@@ -216,7 +220,7 @@ namespace LMB_Archivist
             //Compatibility for older LMB emotes that still hang around for SOME reason.
             if(url.StartsWith("/html/"))
             {
-                url = baseUrl + url;
+                url = BASE_URL + url;
             }
 
             var webResponse = await GetRequestStreamAsync(url);
@@ -228,7 +232,7 @@ namespace LMB_Archivist
                 using (BinaryReader reader = new BinaryReader(webResponse.GetResponseStream()))
                 {
                     Byte[] lnByte = reader.ReadBytes(1 * 1024 * 1024 * 10);
-                    using (FileStream lxFS = new FileStream("output/" + saveImageLocation + System.IO.Path.GetFileName(url), FileMode.Create))
+                    using (FileStream lxFS = new FileStream("output/" + SAVE_IMAGE_LOCATION + System.IO.Path.GetFileName(url), FileMode.Create))
                     {
                         lxFS.Write(lnByte, 0, lnByte.Length);
                     }
