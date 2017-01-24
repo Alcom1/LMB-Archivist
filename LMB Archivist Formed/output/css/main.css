@@ -1,0 +1,1369 @@
+#lia-body .lia-content textarea {resize: both !important; height: 400px;}
+/* 
+* Generel tags
+*/
+body {background:#cfd2da url(body-bg.png) repeat-x;}
+body#lia-body .lia-content {background: transparent;}
+
+#lia-body .lia-page {
+    position: relative;
+    padding-bottom: 296px;
+}
+
+/*
+* Pagetitle
+*/
+#lia-body .lia-content .lia-component-common-widget-page-title, #lia-body .lia-content .lia-component-common-widget-page-title a {
+	font-size: 24px;
+	font-family: verdana, arial, helvetica;
+	font-weight: bold;
+	color: #d25a1b;
+}
+#lia-body .lia-content .lia-component-common-widget-page-title {
+    font-size: 30px;
+}
+
+/*
+* Banner
+*/
+#lia-body .lia-content .lego-custom-banner {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 400px;
+    height: 90px;
+}
+
+/*
+* Buttons
+*/
+#lia-body .lia-content a.lia-button, 
+#lia-body .lia-content span.lia-button, 
+#lia-body .lia-content button.lia-button, 
+#lia-body .lia-content input.lia-button,
+
+#lia-body .lia-content a.lia-button.lia-button-secondary,
+#lia-body .lia-content span.lia-button.lia-button-secondary,
+#lia-body .lia-content button.lia-button.lia-button-secondary,
+#lia-body .lia-content input.lia-button.lia-button-secondary
+{
+    border: 1px solid #C8C8C8;
+    border-radius: 10px;
+    font-family: verdana;
+    font-size: 9px;
+    text-transform: uppercase;
+    color: #676767;
+    padding: 0 10px;
+    line-height: 20px;
+    height: 20px;
+    background: url(dropdown-bg.png) top right no-repeat #fff;
+}
+#lia-body .lia-content a.lia-button:hover, 
+#lia-body .lia-content span.lia-button:hover, 
+#lia-body .lia-content button.lia-button:hover, 
+#lia-body .lia-content input.lia-button:hover,
+
+#lia-body .lia-content a.lia-button.lia-button-secondary:hover,
+#lia-body .lia-content span.lia-button.lia-button-secondary:hover,
+#lia-body .lia-content button.lia-button.lia-button-secondary:hover,
+#lia-body .lia-content input.lia-button.lia-button-secondary:hover
+{
+    border: 1px solid #888;
+    background-color: #fff;
+}
+
+#lia-body .lia-content .lia-menu-navigation {
+	border: 1px solid #c8c8c8;
+	border-radius: 10px;
+	font-family: verdana;
+	font-size: 9px;
+	text-transform: uppercase;
+	color: #676767;
+	padding: 0 10px;
+	line-height: 20px;
+	height: 20px;
+	background: url(dropdown-bg.png) top right no-repeat;
+}
+	#lia-body .lia-content .lia-menu-navigation a {
+		color: #676767;
+	}
+	#lia-body .lia-content .lia-menu-navigation a:hover {
+		color: #000;
+		text-decoration: none;
+	}
+
+/*
+* Breadcrumb
+*/
+#lia-body .lia-content .lia-quilt-row-header {
+    position: relative;
+}
+    #lia-body .lia-content .lia-quilt-row-header .lia-component-common-widget-breadcrumb {
+        border-bottom: 0px solid transparent;
+        padding: 5px 15px;
+        
+    }
+    #lia-body .lia-content .lia-quilt-row-header .lia-component-common-widget-breadcrumb ul.lia-list-standard-inline li {margin: 0; font-size: 12px; font-family: verdana; color: #3c5263;}
+    #lia-body .lia-content .lia-quilt-row-header .lia-component-common-widget-breadcrumb ul.lia-list-standard-inline li a {font-size: 12px; font-family: verdana; color: #3c5263; text-decoration: underline;}
+    #lia-body .lia-content .lia-quilt-row-header .lia-component-common-widget-breadcrumb .lia-breadcrumb-seperator {padding: 0 10px;}
+    #lia-body .lia-content .lia-component-common-widget-breadcrumb ul.lia-list-standard-inline li.final-crumb {font-weight: normal;}
+
+#lia-body .lia-content .lia-quilt-row-header {
+    height: 145px;
+    position: relative;
+    background: url(banner.png) no-repeat left 35px;
+}
+#lia-body .lia-content .lia-quilt-row-header .lia-quilt-row-title {
+    height: 109px;
+}
+
+/*
+* The footer
+*/
+#lia-body .lia-quilt-footer {
+    border-top: 0px solid transparent;
+}
+
+/*
+* The market selector
+*/
+#lia-body .lego-market-selector{
+	display: none;
+}
+
+
+/*
+* The searchform
+*/
+#lia-body .lia-content .lia-component-quilt-header .lia-component-common-widget-search-form {
+    float: right;
+    margin: 0 15px 0 0;
+    border-radius: 15px 15px 0 0px;
+    background: #fff;
+    padding: 10px 10px 0 10px;
+    position: relative;
+    right: -1px;
+    border-top: 1px solid #D5D5D5;
+    border-right: 1px solid #D5D5D5;
+    border-left: 1px solid #D5D5D5;
+}
+    #lia-body .lia-content .lia-component-quilt-header .lia-component-common-widget-search-form form {
+        margin: 0;
+    }
+        #lia-body .lia-content .lia-component-quilt-header .lia-component-common-widget-search-form form .lia-button-searchForm-action {
+            background: url(search-icon.png) 0 0 no-repeat;
+            display: block;
+            text-indent: -10000px;
+            border: 1px solid transparent;
+            width: 39px;
+            height: 25px;
+            line-height: 25px;
+        }
+        #lia-body .lia-content .lia-component-quilt-header .lia-component-common-widget-search-form form .lia-form-type-text {      
+            border: 1px solid #C9C9C9;
+            border-radius: 10px;
+            box-shadow: inset 2px 2px 7px #C9C9C9;
+            outline: 0px solid transparent;
+            height: 22px;
+            line-height: 20px;
+            padding: 2px 10px;
+        }
+        #lia-body .lia-content .lia-component-quilt-header .lia-component-common-widget-search-form form .lia-search-form-granularity {
+            border: 1px solid #C9C9C9;
+        }
+
+		#lia-body .SearchForm.lia-search-form-wrapper {
+			margin: 10px;
+		}
+/*
+	User search result
+*/				
+#lia-body .user-search-result-email-block.lia-summary-view-statistics-wrapper ,
+#lia-body .user-search-result-statistics-block-left,
+#lia-body .lia-summary-view-statistic-post-count, 
+#lia-body .lia-summary-view-statistic-logins, 
+#lia-body .lia-summary-view-statistic-last-ip, 
+#lia-body .lia-summary-view-statistic-last-visit-date,
+#lia-body .lia-summary-view-statistic-roles{
+	display: none;
+}
+#lia-body .lia-content .user-search-result-container .search-user-avatar-container {
+	height: 97px;
+}
+#lia-body .search-result-syndicate {
+	padding: 5px 15px 0 0;
+}
+#lia-body .search-result-sort-by-label{
+	padding: 3px 0 0;
+}
+#lia-body .lia-menu-action-search-result-sorting .lia-menu-navigation .dropdown-default-item {
+	margin-top: 2px;
+}
+#lia-body .search-result-message-icon{
+	display: none;
+}
+
+#lia-body .lia-content .thread-search-item-results{
+	margin: 0px !important;
+	width: 750px !important;
+}
+#lia-body .lia-quilt-column-alley .lia-quilt-column-alley-right{
+	margin: 0px !important;
+}
+#lia-body .lia-quilt-column-alley .lia-quilt-column-alley-single{
+	box-shadow: 0 #FFF !important;
+}
+#lia-body .lia-content .lia-quilt-column-23{
+	width: 100% !important;
+}
+#lia-body .lia-content .search-result-message-subject .lia-message-author{
+		margin-top: 3px !important;
+		width: 90% !important;
+		display: block !important;		
+}
+/*
+	Search filters
+*/
+#lia-body .lia-quilt-column.lia-quilt-column-05.lia-quilt-column-left.thread-search-filters{
+	width: 170px !important;
+	margin-left: 5px;
+}
+#lia-body .search-filters{
+	margin-top: 5px;
+}
+/*
+* Main content wrapper
+*/
+#lia-body .lia-content .lia-quilt-row-main>.lia-quilt-column-alley-left>.lia-quilt-column-alley,
+#lia-body .lia-content .lia-quilt-row-main>.lia-quilt-column-main-content>.lia-quilt-column-alley {
+    padding: 15px;
+    background: transparent;
+    margin: 0 20px 30px 0;
+    border-radius:15px 0 15px 15px ;
+    box-shadow: 0 0 20px 7px #aaa;
+    background: #fff;
+}
+#lia-body .lia-content .lia-quilt-row-main>.lia-quilt-column-main-content>.lia-quilt-column-alley-single {
+	box-shadow: 0 0 0 0 #aaa;
+    border-radius: 15px;
+    margin: 0 0 30px 0;
+}
+#lia-body .lia-content .lia-quilt-row-main>.lia-quilt-column-main-content>.lia-quilt-column-alley-right {
+    border-radius: 15px;
+    margin: 0 0 30px 0;
+}
+
+
+
+/*
+* Generel panel styling in main content
+*/
+#lia-body .lia-content .lia-panel .lia-panel-heading-bar {
+    border-bottom: 0px solid transparent;
+    background-color: transparent;
+    font-size: 24px;
+    font-family: sansasoftstdboldregular, verdana, arial, helvetica, sans-serif;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 0;
+    color: #d8721b;
+    clear: both;
+    line-height: 24px;
+
+}
+
+/*
+* Legend
+*/
+#lia-body .lia-content #legend_wrapper {clear: both; overflow: auto; padding-bottom: 20px;}
+    #lia-body .lia-content #legend_wrapper div div div {float: left; margin: 0 30px 0 0;}
+#lia-body .lia-content #legend_wrapper div div div img {position: relative; top: 17px;}
+
+
+/*
+* Generel panel styling in the sidebar
+*/
+
+#lia-body .lia-content .lia-quilt-column-alley-right {margin-top: 0 !important;}
+
+#lia-body .lia-content .lia-quilt-column-side-content .lia-panel {margin: 0 0 10px 0;}
+#lia-body .lia-content .lia-quilt-column-side-content .lia-panel .lia-panel-heading-bar,
+#lia-body .lia-content .lia-quilt-column-side-content .lia-section-header-title {
+    background-color: #6084b7;
+    margin: 0; 
+    padding: 7px 0;
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    font-weight: normal;
+    font-family: verdana, arial, helvetica;
+    line-height: normal;
+    display: block;
+}
+#lia-body .lia-content .lia-quilt-column-side-content  .lia-panel .lia-panel-heading-bar-title {
+    display: block;
+    color: #fff;
+    text-align: center;
+    float: none;
+}
+
+#lia-body .lia-content .lia-quilt-column-side-content .lia-panel .lia-panel-content,
+#lia-body .lia-content .lia-quilt-column-side-content .polls{
+background: #d4e4f4;
+border-left: 2px solid #6084b7;
+border-bottom: 2px solid #6084b7;
+border-right: 2px solid #6084b7;
+    border-radius: 0 0 10px 10px;
+    padding: 0px;
+}
+
+#lia-body .lia-content .lia-component-common-widget-polls-list {margin-bottom: 20px;}
+
+#lia-body .lia-panel .lia-panel-heading-bar-wrapper .lia-panel-heading-bar-title
+{
+	color: #A55918;
+	font-size: 14px;
+}
+
+/*
+* Online users
+*/
+#lia-body .lia-content .custom-users-online .header {
+    background: url(orange-header.png) repeat-x top left;
+    font-family: SansaSoftStdSemiBoldRegular, arial, verdana;
+    font-size: 12px;
+    background-color: #c86619;
+    margin: 0 0 10px 0; 
+    padding: 0 10px;
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+    text-align: left;  
+    height: 25px;
+    line-height: 25px;
+    border-bottom: 0px solid transparent;
+}
+
+
+/*
+* Messageboard overview
+*/
+#lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list {
+    
+}
+
+
+#lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list table {
+    border-collapse: separate;
+}
+#lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list table td {
+    border-bottom: 3px solid #fff;
+    border-top: 3px solid #fff;
+}
+    #lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list thead th{
+        background: #cfd1d9;
+        font-family: verdana, arial, helvetica;
+        font-size: 11px;
+        color: #676767;
+        border-bottom: 2px solid #fff;
+    }
+
+    #lia-body .lia-content table.lia-list-wide tr.lia-list-row-first-non-float td {
+        border-top: 0px solid #E5E5E5;
+    }
+    #lia-body .lia-content table.lia-list-wide tr.lia-list-row-float td {
+        background-color: #D2E1F0;
+    }
+
+    #lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list thead th:first-child{
+        border-radius: 10px 0 0 0;
+    }
+    #lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list thead th:last-child{
+        border-radius: 0 10px 0 0;
+    }
+    #lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list .lia-row-odd  td {
+        background: #f9f2c0;
+    }
+    #lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list .lia-row-even td {
+        background: #fefadf;
+    }
+    #lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list td:last-child {
+        border-radius: 0 10px 10px 0;
+    }
+    #lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list td:first-child {
+        border-radius: 30px 0 0 30px;
+    }
+    #lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list a {
+    color: #8d0007 !important;
+    font-weight: normal;
+    font-size: 14px;
+    }
+    #lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list a .login-bold {font-weight: normal;}
+
+
+    #lia-body .lia-content .lia-quilt-column-main-content .lia-component-forums-widget-message-list .lia-list-standard-inline {
+        display: none;
+    }
+
+
+    #lia-body .lia-panel-tooltip-tr-bl {
+    background: #FFFEEE;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #888;
+    box-shadow: 1px 1px 5px #D5D5D5;
+        max-width: 500px;
+    }
+
+/*
+* Paging
+*/
+#lia-body .lia-content ul.lia-paging-full.lia-paging-full-left {margin-left: 20px}
+#lia-body .lia-content .lia-paging-full {	}
+	#lia-body .lia-content .lia-paging-full>li {
+        border: 1px solid #C8C8C8;
+        border-radius: 10px;
+        font-family: verdana;
+        font-size: 9px;
+        text-transform: uppercase;
+        color: #676767;
+        padding: 0 10px;
+        line-height: 20px;
+        height: 20px;
+        background: url(dropdown-bg.png) top right no-repeat;		
+	}
+	#lia-body .lia-content .lia-paging-full>li span,
+		#lia-body .lia-content .lia-paging-full li a {
+		padding: 0 !important;
+		color: #888 !important;
+        background: transparent !important;
+	}
+    #lia-body .lia-content .lia-paging-full>li span.lia-link-disabled {
+        color: #d5d5d5;
+    }
+#lia-body .lia-content  .thread-search-results-list .lia-paging-full {
+	padding-right: 5px;
+}
+#lia-body .lia-content .lia-paging-full>li.lia-component-pagesnumbered span.lia-link-disabled {
+    color: #000 !important;
+    font-weight: bold;
+}
+
+  #lia-body .lia-content .lia-paging-full .lia-paging-page-previous {
+		border-radius: 10px 0 0 10px;
+		padding: 0 10px;
+
+	}
+
+  #lia-body .lia-content .lia-paging-full .lia-paging-page-next {
+  	border-radius: 0 10px 10px 0;
+		padding: 0 10px;
+	}
+  #lia-body .lia-content .lia-paging-full .lia-paging-page-active span {
+    color: #000 !important;
+    font-weight: bold !important;
+  }
+  #lia-body .lia-content .lia-paging-full .lia-component-pagesnumbered li {
+    margin: 0 !important;
+    color: #888;
+}
+  #lia-body .lia-content .lia-paging-full .lia-component-pagesnumbered li a,
+  #lia-body .lia-content .lia-paging-full .lia-component-pagesnumbered li span {
+		padding: 0 5px !important;
+		display: inline-block !important;
+		text-align: center;
+		margin: 0 !important;
+		-moz-border-radius: 0 !important;
+		-webkit-border-radius: 0 !important;
+		border-radius: 0 !important;
+	}
+
+/*
+* Message view
+*/
+#lia-body .lia-content .lia-message-subject-banner {
+    font-size: 26px;
+    color: #8c0008;
+}
+
+#lia-body .lia-content .linear-message-list,
+.ReplyPage #messageview {
+    background: #dae2f3;
+    border-radius: 15px;
+    padding: 10px;
+    margin: 0 0 10px 0;
+    clear: both;
+}
+#lia-body .lia-content .linear-message-list .lia-quilt-column-main-right>.lia-quilt-column-alley,
+.ReplyPage #messageview .lia-quilt-column-main-right>.lia-quilt-column-alley {
+    border: 2px solid #91aacf;
+    border-radius: 20px;
+    background: #fff;
+    padding: 20px 20px 0 20px;
+    word-wrap: break-word;
+}
+
+#lia-body .lia-content .linear-message-list .lia-message-heading h1{
+    font-size: 14px;
+    font-family: verdana;
+        color: #002541;
+    margin: 0 0 10px 0;
+    display: block;
+}
+#lia-body .lia-content .linear-message-list .lia-message-body-content blockquote {
+	background: #f3f3f3;
+	border: 1px solid #d5d5d5;
+	padding: 10px;
+}
+#lia-body .lia-content .linear-message-list .lia-message-body-content blockquote table,
+#lia-body .lia-content .linear-message-list .lia-message-body-content blockquote table td {
+	border: 0 solid transparent !important;
+}
+
+#lia-body .lia-content .linear-message-list .odd-row .lia-quilt-forum-message .lia-quilt-row-forum-message-main>.lia-quilt-column-left {
+    float: right;
+}
+#lia-body .lia-content .linear-message-list .lia-button-group {
+    margin: 0;
+}
+#lia-body .lia-content .lia-effect-highlight  {
+    border: 0px solid transparent;
+}
+#lia-body .lia-content .message-list .first-message {border-top: none;}
+
+
+
+#lia-body .lia-content .custom-title {
+    color: #D25A1B;
+    font-size: 20px;
+    font-weight: normal;
+    background: url('message-title.png') 10px 0px no-repeat;
+    padding-left: 30px;
+    margin-bottom: 20px;
+    line-height: 30px;
+
+}
+
+/* moving pager to the right */
+#lia-body .lia-content .lia-quilt-forum-topic-page .lia-paging-full-wrapper {
+    float: right;
+}
+#lia-body .lia-content .lia-quilt-forum-topic-page .lia-paging-full-wrapper .lia-paging-page-next {
+    margin-right: 0;
+}
+
+#lia-body .lia-content .lia-message-signature {
+    margin: 20px 0 10px;
+    border-top: 1px solid #D5D5D5;
+    width: 100% !important;
+    padding-top: 10px;
+}
+
+/* removing message stats and date */
+#lia-body .lia-content .lia-quilt-forum-topic-page .lia-message-statistics,
+#lia-body .lia-content .lia-quilt-forum-topic-page .lia-message-classifications,
+#lia-body .lia-content .lia-quilt-forum-topic-page .lia-message-labels{
+    display: none;
+
+}
+
+#lia-body .lia-content .lia-quilt-forum-topic-page .lia-message-post-date {
+    color: #fff;
+    padding: 2px 10px;
+    background: #e9e9e9;
+    border-radius: 4px;
+    display: inline-block;
+}
+    #lia-body .lia-content .lia-quilt-forum-topic-page .lia-message-post-date span {
+        color: #888;
+    }
+
+/* moving post buttons to the same row */
+#lia-body .lia-content .lia-quilt-forum-topic-page .lia-component-report-abuse {
+    float: left;
+    margin: 0 20px 0 0;
+}
+
+
+#lia-body .lia-content .lia-quilt-forum-topic-page .lia-message-tags {
+    float: left;
+    margin: 0 0 0 20px;
+}
+
+/* removing report post on the */
+#lia-body.ReplyPage .lia-component-report-abuse {
+    display: none;
+}
+
+/* removing avatar from message preview */
+#lia-body .lia-content .message-preview {
+    border: 2px solid #6084B7;
+    padding: 15px;
+}
+#lia-body .lia-content .message-preview .lia-message-author {
+    display: none;
+}
+
+/* removing the standard footer pagination (replaced by menu-bar from top) */
+#lia-body .lia-content .lia-quilt-forum-topic-page .lia-message-tags .lia-menu-bar-bottom.bottom-block {
+    display: none;
+}
+    
+/*
+* Browse forum button
+*/
+#lia-body .lia-content .browse-forum {margin: 0 0 10px 0; position: relative;}
+#lia-body .lia-content .lia-quilt-layout-one-column .browse-forum {width: 155px; float: right;}
+
+    #lia-body .lia-content .browse-forum .browse-forum-button {
+        background: url(browse-forum-bg.png) repeat-x 0 0 #be6d1e;
+        border-radius: 10px;
+        color: #fff;
+        text-transform: uppercase;
+        padding: 5px 10px;
+        font-family: verdana;
+        font-size: 10px;
+        font-weight: bold;
+        line-height: 10px;
+        cursor: pointer;
+    }
+    #lia-body .lia-content .browse-forum .browse-forum-button span {
+        background: url(browse-forum-arrow.png) no-repeat right center transparent;
+        padding: 0 30px 0 0;
+        display: block;
+    }
+    #lia-body .lia-content .browse-forum .browse-forum-dropdown {
+        position: absolute;
+        width: 430px;
+        left: -275px;
+        top: 20px;
+        z-index: 100;
+        display: none;
+    }
+    #lia-body .lia-content .browse-forum .browse-forum-content {
+        border-radius: 15px;
+        box-shadow: 0px 0px 10px #444;
+        border: 0px solid transparent;
+        padding: 15px 3px;
+        background: #CFD2DA url(body-bg.png) repeat-x;
+        color: #00549d;
+        overflow: auto;
+    }
+
+#lia-body .lia-content .browse-forum .browse-forum-content>ul{
+    margin: 0;
+    display: block;
+    float: left;
+    width: 195px;
+}
+    #lia-body .lia-content .browse-forum .browse-forum-content>ul.left {margin-right: 10px; padding-right: 10px; border-right: 1px solid #d5d5d5; width: 194px;}
+    #lia-body .lia-content .browse-forum .browse-forum-content>ul.right {}
+    #lia-body .lia-content .browse-forum .browse-forum-content>ul li .category-title {padding: 5px 10px;}
+    #lia-body .lia-content .browse-forum .browse-forum-content>ul li .category-title:hover {background: #ff8b00; color: #fff;}
+    #lia-body .lia-content .browse-forum .browse-forum-content>ul li ul {margin-bottom: 0px;}
+    #lia-body .lia-content .browse-forum .browse-forum-content>ul li ul li a {padding: 0px 20px; display: block; color: #888; font-size: 11px;}
+    #lia-body .lia-content .browse-forum .browse-forum-content>ul li ul li a:hover {color: #000; text-decoration: none;}
+
+/*
+* board options dropdown
+*/
+#lia-body .lia-content .lia-menu-navigation .lia-menu-dropdown-items {
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px #444;
+    border: 0px solid transparent;
+    padding: 15px 5px;
+    background: #f3f3f3;
+    margin: 0;
+}
+    #lia-body .lia-content .lia-menu-navigation .lia-menu-dropdown-items span.lia-separator {
+        background: #d5d5d5;
+        margin: 8px 0;
+    }
+    #lia-body .lia-content .lia-menu-navigation .lia-menu-dropdown-items a {
+        color: #01539d;
+    }
+    #lia-body .lia-content .lia-menu-navigation .lia-menu-dropdown-items a:hover {
+        background: #d5d5d5; border-radius: 5px;
+    }
+    #lia-body .lia-content .lia-menu-navigation .lia-menu-dropdown-items a.addBoardUserFloat /* removing the float board by request */ {
+        display: none;
+    }
+
+/*
+* The user links on the right side
+*/
+#lia-body .lia-content .custom-component-user-links {
+    overflow: auto;
+    margin: -30px 0 0 0;
+    font-family: verdana;
+    font-size: 11px;
+    color: #676767;
+}
+    #lia-body .lia-content .custom-component-user-links a {
+        display: block;
+        width: 33%;
+        float: left;
+        text-align: center;
+        padding: 40px 0 0 0;
+        overflow: hidden;
+        height: 15px;
+    }
+    #lia-body .lia-content .custom-component-user-links a.profile-link {
+        background: url(user-navigation-buttons.png) center top no-repeat;
+    }
+    #lia-body .lia-content .custom-component-user-links a.help-link {
+        background: url(user-navigation-buttons.png) center -55px no-repeat;
+    }
+    #lia-body .lia-content .custom-component-user-links a.settings-link {
+        background: url(user-navigation-buttons.png) center -110px no-repeat;
+    }
+
+
+/*
+* Custom profile
+*/
+#lia-body .lia-content .custom-profile {
+    margin: 0 0 40px 0;
+    overflow: auto;
+}
+#lia-body .lia-content .custom-profile .header h2 {
+    font-family: sansasoftstdboldregular, verdana, arial;
+    font-size: 22px;
+    color: #d67923;
+    margin: 10px 0;
+}
+#lia-body .lia-content .custom-profile .content {
+    border: 2px solid #d67923;
+    padding: 20px;
+    background: #f9f2c0;
+    border-radius: 20px;
+}
+#lia-body .lia-content .custom-profile .lia-message-author {
+    float: left;
+    margin: 0 40px 0 10px;
+}
+#lia-body .lia-content .custom-profile .meta {
+    float: left;
+    font-size: 14px;
+    color: #676767;
+    width: 290px;
+    margin: 0 20px 0 0;
+}
+#lia-body .lia-content .custom-profile .meta strong {font-weight: bold;}
+
+#lia-body .lia-content .custom-profile .founder {float: left; margin: 0 20px 0 0;}
+#lia-body .lia-content .custom-profile .olde {float: left; background: url(olde.png) 0 0 no-repeat transparent; width: 96px; height: 109px;}
+    #lia-body .lia-content .custom-profile .olde img {width: 109px;
+        height: 30px;
+        position: relative;
+        top: 24px;
+        left: -6px;}
+#lia-body .lia-content .custom-profile .olde .counter {text-align: center; position: relative; top: 40px; font-weight: bold;}
+
+.role-badges {
+    border: 2px solid #d67923;
+    padding: 20px;
+    padding-bottom: 13px;
+    background: #f9f2c0;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.role-badges img {
+    float:left;
+    margin-bottom: 10px;
+    margin-right: 10px;
+}
+
+#lia-body .lia-content h3.role-badges-header {
+    color: #A55918;
+    font-size: 14px;
+    font-family: sansasoftstdboldregular, verdana, arial, helvetica, sans-serif;
+    font-weight: bold;
+    margin: 6px 0;
+    padding: 0;
+    clear: both;
+    line-height: 24px;
+}
+/*
+* Welcome text (custom)
+*/
+#lia-body .lia-content  .custom-welcome-text {
+    background: url(custom-welcome-text-bg.png) left bottom no-repeat transparent;
+    margin: 0 0 20px 0;
+    position: relative;
+    width: 795px;
+    left: -22px;
+    padding-bottom: 6px;
+}
+#lia-body .lia-content  .custom-welcome-text h3 {
+    font-family: SansaSoftStdSemiBoldRegular, arial, verdana;
+    font-size: 12px;
+    color: #fff;
+    padding: 5px 30px;
+    text-align: center;
+    background: url(orange-header.png) 0 0 repeat-x #e36600;
+ 
+    border-radius: 5px 5px 0 0;
+}
+
+/*
+* Table on the profile page
+*/
+#lia-body .lia-content .lia-quilt-view-profile-page .lia-quilt-column-main-content {}
+#lia-body .lia-content .lia-quilt-view-profile-page .lia-quilt-column-main-content table,
+#lia-body .lia-content .lia-quilt-moderation-pending .lia-quilt-column-main-content table,
+#lia-body .lia-content .lia-quilt-moderation-rejected .lia-quilt-column-main-content table,
+#lia-body .lia-content .lia-quilt-category-page .lia-quilt-column-main-content .SimpleMessageList table {
+    border: 2px solid #6084b6;
+    border-radius: 5px;
+}
+#lia-body .lia-content .lia-quilt-view-profile-page .lia-quilt-column-main-content  table thead th,
+#lia-body .lia-content .lia-quilt-moderation-pending .lia-quilt-column-main-content  table thead th,
+#lia-body .lia-content .lia-quilt-moderation-rejected .lia-quilt-column-main-content  table thead th,
+#lia-body .lia-content .lia-quilt-category-page .lia-quilt-column-main-content .SimpleMessageList table thead th {
+        background: #6084b6;
+        font-family: sansasoftstdsemiboldregular, verdana;
+        font-size: 13px;
+        color: #fff;
+        border-bottom: 0px solid white;
+        border-radius: 0px !important;
+    }
+#lia-body .lia-content .lia-quilt-view-profile-page .lia-quilt-column-main-content  table td,
+#lia-body .lia-content .lia-quilt-moderation-pending .lia-quilt-column-main-content  table td,
+#lia-body .lia-content .lia-quilt-moderation-rejected .lia-quilt-column-main-content  table td,
+#lia-body .lia-content .lia-quilt-category-page .lia-quilt-column-main-content .SimpleMessageList table td{
+    border-radius: 0 !important;
+    border: 0px solid transparent;
+    background: #fff;
+    font-family: verdana;
+    font-size: 11px;
+    color: #676767;
+}
+#lia-body .lia-content .lia-quilt-view-profile-page .lia-quilt-column-main-content  table td a,
+#lia-body .lia-content .lia-quilt-moderation-pending .lia-quilt-column-main-content  table td a,
+#lia-body .lia-content .lia-quilt-moderation-rejected .lia-quilt-column-main-content  table td a,
+#lia-body .lia-content .lia-quilt-category-page .lia-quilt-column-main-content .SimpleMessageList table td a{
+    color: #404a5f !important;
+    font-weight: bold;
+    font-size: 11px;
+}
+#lia-body .lia-content .lia-quilt-view-profile-page .lia-quilt-column-main-content  table .lia-row-odd td,
+#lia-body .lia-content .lia-quilt-moderation-pending .lia-quilt-column-main-content  table .lia-row-odd td,
+#lia-body .lia-content .lia-quilt-moderation-rejected .lia-quilt-column-main-content  table .lia-row-odd td,
+#lia-body .lia-content .lia-quilt-category-page .lia-quilt-column-main-content .SimpleMessageList .lia-row-odd td
+{
+    background: #d4e3f5;
+}
+#lia-body .lia-content .lia-quilt-view-profile-page .lia-quilt-column-main-content  table .lia-row-even td,
+#lia-body .lia-content .lia-quilt-moderation-pending .lia-quilt-column-main-content  table .lia-row-even td,
+#lia-body .lia-content .lia-quilt-moderation-rejected .lia-quilt-column-main-content  table .lia-row-even td,
+#lia-body .lia-content .lia-quilt-category-page .lia-quilt-column-main-content .SimpleMessageList .lia-row-even td{
+    background: #fff;
+}
+#lia-body .lia-content .lia-quilt-view-profile-page .lia-quilt-column-main-content ul {
+    margin: 0;
+}
+
+
+/*
+* Board overview (custom)
+*/
+#lia-body .lia-content  .custom-board-overview {
+    background: #DAE2F3;
+    padding: 20px 10px;
+    border-radius: 20px;
+}
+#lia-body .lia-content  .custom-board-overview ul li{
+    float: left;
+    width: 50%;
+    min-height: 125px;
+}
+
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper {
+    min-height: 50px;
+    color: #404A5F;
+    width: 230px;
+    height: 160px;
+    margin: 0 auto;
+    background: url(board-icon-generel.png) 0 0 no-repeat;
+    background-repeat: no-repeat;
+    padding-left: 130px;
+    position: relative;
+}
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper .hidden-link {
+    display: block;
+    text-indent: -10000px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    width: 140px;
+    height: 136px;
+}
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper a {
+    color: #404a5f;
+}
+
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper h5 {
+    font-weight: bold;
+    margin: 0px 0 5px 0;
+    display: block;
+    color: #305599;
+    font-size: 14px;
+}
+    #lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper h5 a {text-decoration: none; color: #305599;}
+
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper a {text-decoration: none;}
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper a:hover {text-decoration: underline;}
+
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper img {
+    float: left;
+    margin-right: 20px;
+    margin-top: -10px;
+    display: block;
+    width: 90px;
+}
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper .additional-information {
+    width: 180px;
+    float: left;
+}
+
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper strong {font-weight: bold;}
+
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper .bubble-top {
+
+}
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper .bubble-bottom {
+
+}
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper .bubble-content {
+    padding: 17px 25px;
+}
+
+
+#lia-body .lia-content  .custom-board-overview ul li .bubble-wrapper .bubble-content .last-post {
+    font-style: italic;
+    margin: 0 0 10px 0;
+    max-height: 45px;
+    overflow: hidden;
+}
+#lia-body .lia-content  .custom-board-overview ul li h4 {
+    color: #404a5f;
+}
+
+#lia-body .lia-content  .custom-board-overview .browse-forum-button {
+    background: url(dropdown-bg.png) no-repeat right center #fff;
+    border: 1px solid #c7c7c7;
+    display: inline-block;
+    font-family: verdana;
+    text-transform: uppercase;
+    color: #676767;
+    font-weight: normal;
+}
+#lia-body .lia-content  .custom-board-overview .browse-forum-button span {
+    background: url(arrow-down.png) no-repeat right center transparent;
+    padding-right: 20px;
+}
+
+#lia-body .lia-content .custom-board-overview .browse-forum .browse-forum-dropdown {
+    width: 250px;
+    left: -20px;
+    top: 20px;
+
+}
+
+#lia-body .lia-content  .custom-board-overview .browse-forum  .browse-forum-dropdown-top {
+    background: url(speach-bubble-dropdown.png) 0 0 no-repeat;
+    height: 40px;
+}
+
+#lia-body .lia-content  .custom-board-overview .browse-forum  .browse-forum-content {
+    border-radius: 0px;
+    box-shadow: none;
+    border: 0px solid transparent;
+    padding:0 3px;
+    background: transparent url(speach-bubble-dropdown.png) repeat-y -250px 0;
+    color: #555;
+    overflow: auto;
+}
+#lia-body .lia-content  .custom-board-overview .browse-forum  .browse-forum-content a {
+    color: #305599;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-size: 14px;
+    text-decoration: none;
+    display: block;
+    margin: 0 auto;
+    width: 215px;
+}
+#lia-body .lia-content  .custom-board-overview .browse-forum  .browse-forum-content a:hover {
+    color: #fff;
+    padding: 5px 10px;
+    background: #eb8a00;
+    text-decoration: none;
+}
+
+#lia-body .lia-content  .custom-board-overview .browse-forum  .browse-forum-dropdown-bottom {
+    background: transparent url(speach-bubble-dropdown.png) repeat-y -500px bottom;
+    height: 20px;
+}
+
+
+/*
+* Avatar
+*/
+#lia-body .lia-content .lia-message-author {
+	width: 92px;
+	padding: 5px;
+	border-radius: 10px;
+	border: 2px solid #db883b;
+	background: #fcf3bf;
+	margin: 0;
+    position: relative;
+
+}
+#lia-body .lia-content .odd-row .lia-message-author {margin: 0 10px 0 0; float: right;}
+#lia-body .lia-content .even-row .lia-message-author,
+.ReplyPage #messageview .lia-message-author {margin: 0 0 0 20px;}
+
+#lia-body .lia-content .lia-message-quick-reply .lia-button-group {
+    margin-bottom: 20px;
+}
+#lia-body .lia-content .lia-message-quick-reply textarea {
+    margin-bottom: 0 !important;
+}
+
+#lia-body .lia-content .lia-message-author .lia-message-author-avatar {height: 160px;}
+#lia-body .lia-content .lia-message-author .lia-message-author-rank {
+    color: #888;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    position: absolute;
+    z-index: 0;
+    bottom: 30px;
+    width: 92px;
+}
+#lia-body .lia-content .lia-message-author .lia-message-author-post-count {display: none !important;}
+#lia-body .lia-content .lia-message-author .lia-message-author-registered-date {
+    position: absolute;
+    width: 37px;
+    height: 32px;
+    top: 40px;
+    right: -35px;
+    background: url(speech-triangle-left.png) no-repeat 0 0 transparent;
+    display: block;
+    text-indent: -10000px;
+}
+    #lia-body .lia-content .odd-row .lia-message-author .lia-message-author-registered-date {
+        background: url(speech-triangle-right.png) no-repeat 0 0 transparent;
+        left: -35px;
+    }
+
+#lia-body .lia-content .lia-message-author .lia-message-author-ipaddress {display: none !important;}
+
+#lia-body .lia-content .lia-message-author .lia-message-author-username {
+	margin-left: -19px;
+	width: 130px;
+	height: 34px;
+	text-align: center;
+	background: url(avatar-author-bg.png) bottom left transparent;
+    border-radius: 3px 3px 0 0;
+    color: #fff;
+    font-weight: bold;
+
+}
+#lia-body .lia-content .lia-message-author .lia-message-author-username span span {display: block; line-height: 25px; vertical-align: middle;}
+#lia-body .lia-content .lia-message-author .lia-message-author-username img {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 0;
+    display: block;
+    border-top: 2px solid #DB883B;
+}
+
+
+#lia-body .lia-content .lia-user-avatar {
+    text-align: center;
+}
+#lia-body .lia-content .lia-user-avatar-message {
+    max-height: 1000px !important;
+    max-width: 1000px !important;
+}
+#lia-body .lia-content .lia-message-author .lia-message-author-username a {
+	color: #fff !important;
+	display: block;
+	line-height: 22px;
+}
+
+
+/*
+* Autocomplete
+*/
+#lia-body .lia-content .lia-autocomplete-container {
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px #444;
+    border: 0px solid transparent;
+    padding: 15px 5px;
+    background: #f3f3f3;
+    margin: 10px 0 0 0;
+}
+    #lia-body .lia-content .lia-autocomplete-container .lia-autocomplete-header {
+        border-top: 0 solid transparent;
+        font-size: 14px;
+        color: #d8721b;
+        font-weight: bold;
+        padding: 0 10px;
+    }
+    #lia-body .lia-content .lia-autocomplete-container .lia-autocomplete-content a {
+        line-height: normal;
+    }
+    #lia-body .lia-content .lia-autocomplete-container .lia-autocomplete-content ul li.selected {background: #d5d5d5; border-radius: 5px;}
+    #lia-body .lia-content .lia-autocomplete-container .lia-autocomplete-content ul .lia-search-match-lithium {background: #d8721b; color: #fff; }
+
+/*
+* Tabs
+*/
+#lia-body .lia-content .lia-tabs-standard-wrapper>div {
+    background: #dbe3f3;
+    border: 2px solid #6084b7;
+
+}
+#lia-body .lia-content .lia-tabs-standard-wrapper .lia-tabs-standard-wrapper {border: 0px solid transparent;}
+#lia-body .lia-content ul.lia-tabs-standard {
+    line-height: 12px;
+    border-bottom: 0px solid transparent;
+    list-style: none;
+    padding: 5px 0 0 0;
+    margin: 0;
+}
+#lia-body .lia-content ul.lia-tabs-standard li {
+    border: 2px solid #6084b7;
+    border-bottom: 0px solid white;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    float: left;
+    margin: 0  3px 0 0;
+    /*padding: 0 30px;*/
+    position: relative;
+    top: 2px;
+    background: #dbe3f3;
+}
+#lia-body .lia-content ul.lia-tabs-standard li.lia-tabs-active {
+    border-bottom: 2px solid #DBE3F3;
+}
+    #lia-body .lia-content ul.lia-tabs-standard li.lia-tabs-inactive {background: url(tab-bg.png) repeat-x;}
+    #lia-body .lia-content ul.lia-tabs-standard li.lia-tabs-inactive:hover { background-color: transparent; border: 2px solid #6084b7; border-bottom: 0px solid transparent }
+    #lia-body .lia-content ul.lia-tabs-standard li a {color: #003173; font-size: 12px;}
+    #lia-body .lia-content ul.lia-tabs-standard li.lia-tabs-inactive  li a {color: #fff; font-size: 14px; font-weight: bold;}
+
+
+#lia-body .lia-content ul.lia-tabs-secondary {
+    border-bottom: 0px solid transparent;
+    margin: 10px 0;
+}
+#lia-body .lia-content ul.lia-tabs-secondary li {
+    padding: 5px;
+    margin: 0 10px 0 0;
+}
+
+#lia-body .lia-content .lia-component-faq-index {
+    color: #fff;
+    text-transform: uppercase;
+    font-family: verdana;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 11px;
+    cursor: text;
+
+}
+    #lia-body .lia-content .lia-component-faq-index .faq-question {
+        text-transform: none;
+        color: #888;
+        font-weight: normal;
+        cursor: text;
+
+    }
+
+#lia-body .lia-content .lia-component-report-abuse .lia-component-forums-action-report-abuse,
+#lia-body .lia-content a.lia-button.lia-action-reply,
+#lia-body .lia-content a.lia-button.lia-action-quick-reply {
+    background: url(blue-button-bg.png) repeat-x 0 0;
+    color: #fff;
+
+    font-family: verdana;
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 0px 10px;
+    line-height: 22px;
+    height: 22px;
+    margin: 10px 0;
+    display: inline-block;
+    clear: both;
+    border: 5px solid #C7D3E5;
+    border-radius: 15px;
+    text-shadow: 1px 1px 5px black;
+}
+    #lia-body .lia-content .lia-component-report-abuse .lia-component-forums-action-report-abuse:hover,
+    #lia-body .lia-content a.lia-button.lia-action-reply:hover,
+    #lia-body .lia-content a.lia-button.lia-action-quick-reply:hover {
+        background: url(blue-button-bg.png) repeat-x 0 -22px;
+        color: #fff;
+
+        font-family: verdana;
+        font-size: 10px;
+        text-transform: uppercase;
+        padding: 0px 10px;
+        line-height: 22px;
+        height: 22px;
+        margin: 10px 0;
+        display: inline-block;
+        clear: both;
+        border: 5px solid #C7D3E5;
+        border-radius: 15px;
+        text-shadow: 1px 1px 5px black;
+        text-decoration: none;
+    }
+
+/* Kudos */
+#lia-body .lia-content .lia-message-kudos {
+    float: left;
+
+    margin: 10px 0;
+}
+#lia-body .lia-content .lia-message-kudos .lia-button-image-kudos-wrapper {border: 5px solid #C7D3E5;
+    border-radius: 15px;}
+
+#lia-body .lia-content .lia-component-kudos-widget-button-version-2 .lia-button-image-kudos-horizontal .lia-button-image-kudos-give,
+#lia-body .lia-content .lia-component-kudos-widget-button-version-2 .lia-button-image-kudos-horizontal.lia-button-image-kudos-kudoed .lia-button-image-kudos-give {
+    background: url(blue-button-bg.png) repeat-x 0 0;
+    width: 81px;
+    height: 22px;
+    border-radius: 0 15px 15px 0px;
+}
+    #lia-body .lia-content .lia-component-kudos-widget-button-version-2 .lia-button-image-kudos-horizontal .lia-button-image-kudos-give:hover {
+        background: url(blue-button-bg.png) repeat-x 0 -22px;
+    }
+
+
+#lia-body .lia-content .lia-component-kudos-widget-button-version-2 .lia-button-image-kudos-horizontal .lia-button-image-kudos-give a,
+#lia-body .lia-content .lia-component-kudos-widget-button-version-2 .lia-button-image-kudos-horizontal .lia-button-image-kudos-give a:hover {
+    background: url(like.png) no-repeat 10px center;
+    color: #fff;
+    padding-left: 10px;
+    width: 70px;
+    text-align: center;
+    font-family: verdana;
+    font-size: 10px;
+    text-transform: uppercase;
+    line-height: 22px;
+    height: 22px;
+    text-shadow: 1px 1px 5px black;
+    text-decoration: none;
+}
+
+#lia-body .lia-content .lia-component-kudos-widget-button-version-2 .lia-button-image-kudos-horizontal .lia-button-image-kudos-give span,
+#lia-body .lia-content .lia-component-kudos-widget-button-version-2 .lia-button-image-kudos-horizontal .lia-button-image-kudos-give span:hover {
+    background: url(liked.png) no-repeat 10px center;
+    color: #fff;
+    padding-left: 10px;
+    width: 70px;
+    text-align: center;
+    font-family: verdana;
+    font-size: 10px;
+    text-transform: uppercase;
+    line-height: 22px;
+    height: 22px;
+    text-shadow: 1px 1px 5px black;
+    text-decoration: none;
+    display: block;
+}
+
+#lia-body .lia-content .lia-component-kudos-widget-button-version-2 .lia-button-image-kudos-horizontal.lia-button-image-kudos-not-kudoed .lia-button-image-kudos-give span,
+#lia-body .lia-content .lia-component-kudos-widget-button-version-2 .lia-button-image-kudos-horizontal.lia-button-image-kudos-not-kudoed .lia-button-image-kudos-give span:hover {
+    background: url(like.png) no-repeat 10px center;
+}
+
+#lia-body .lia-content .lia-component-kudos-widget-button-version-2 .lia-button-image-kudos-horizontal .lia-button-image-kudos-count {
+    background: #fff;
+    color: #004c8c;
+    height: 22px;
+    line-height: 22px;
+    vertical-align: middle;
+    -webkit-border-radius: 15px;
+    border-radius: 15px;
+}
+#lia-body .lia-content .lia-component-kudos-widget-button-version-2 .lia-button-image-kudos-horizontal .lia-button-image-kudos-count span {
+    color: #004c8c;
+}
+
+#lia-body .lia-content .lia-component-kudos-widget-button-version-2 .lia-button-image-kudos-horizontal.lia-button-image-kudos-disabled .lia-button-image-kudos-give {
+    background: url(blue-button-bg.png) repeat-x 0 -22px;
+}
+
+/*
+* Removing badges from pages
+*/
+#lia-body .lia-content .lia-user-rank-icon-left {
+    display: none;
+}
+
+/*
+* Remove the background color from highligth elements
+*/
+#lia-body .lia-content .lia-effect-highlight {
+    background: #ffffcc;
+    padding: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #d5d5d5;
+}
+
+/*
+* Images for the widgets
+*/
+
+#lia-body .lia-content .lia-quilt-column-alley-right #pollsList-container { /* Polls */
+    background: url(widget-polls.png) #D4E4F4 top center no-repeat;
+    padding-top: 80px;
+}
+#lia-body .lia-content .lia-quilt-column-alley-right .lia-component-kudos-widget-messages-leaderboard .lia-panel-content { /* Most liked posts */
+    background: url(widget-like1.jpg) #D4E4F4 top center no-repeat;
+    padding: 80px 0 0 0;
+}
+    #lia-body .lia-content .lia-quilt-column-alley-right .lia-component-kudos-widget-messages-leaderboard .lia-panel-content tr.lia-row-odd{background: #fff;}   
+    #lia-body .lia-content .lia-quilt-column-alley-right .lia-component-kudos-widget-messages-leaderboard .lia-panel-content td{border-bottom: 0px solid transparent}
+    
+#lia-body .lia-content .lia-quilt-column-alley-right .lia-component-kudos-widget-authors-leaderboard .lia-panel-content {
+    background: url(widget-like2.jpg) #D4E4F4 top center no-repeat;
+    padding-top: 80px;
+}
+    
+#lia-body .lia-content .lia-quilt-column-alley-right .lia-component-common-widget-announcement .lia-panel-content { /* Annonuncement */
+    background: url(widget-announcement.jpg) #D4E4F4 top center no-repeat;
+    padding-top: 90px;
+}
+
+
+
+#lia-body .lia-content #pollsList-container .lia-text {
+    margin: 0 0 10px 0;
+    font-weight: bold;
+}
+#lia-body .lia-content #pollsList-container table.lia-list-slim td {
+    border-bottom: 1px solid #E5E5E5;
+    padding: 5px 3px 5px 0;
+    vertical-align: top;
+}
+
+
+/*
+* Ugly hacking the reply page
+*/
+#lia-body .lia-content .message-body-editor {
+    border: 2px solid #6084B7;
+    padding: 0 5px 5px 5px;
+}
+
+#lia-body.lia-board .lia-page .lia-message-view .lia-message-body .lia-message-body-content blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote blockquote {display: none;}

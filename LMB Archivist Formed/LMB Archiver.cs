@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Net;
 using System.Web;
 using HtmlAgilityPack;
@@ -17,32 +13,8 @@ using System.Reflection;
 
 namespace LMB_Archivist_Formed
 {
-    public partial class Form1 : Form
+    public static class LMB_Archiver
     {
-        public Form1()
-        {
-            InitializeComponent();
-            Start(349888);
-        }
-
-        private void archive_post_radio_CheckedChanged(object sender, EventArgs e)
-        {
-            changeArchiveMode();
-        }
-
-        private void archive_topic_radio_CheckedChanged(object sender, EventArgs e)
-        {
-            changeArchiveMode();
-        }
-
-        private void changeArchiveMode()
-        {
-            this.archive_post_panel.Enabled = this.archive_post_radio.Checked;
-            this.archive_topic_panel.Enabled = this.archive_topic_radio.Checked;
-
-            this.button_archive.Enabled = true;
-        }
-
         //Base LMB URL
         private const string BASE_URL = "https://community.lego.com/";
 
@@ -59,27 +31,26 @@ namespace LMB_Archivist_Formed
         private const string SAVE_LOCATION = "output/";
 
         //Username
-        private string username;
+        private static string username;
 
         //Task Factory
-        private TaskFactory taskFactory = new TaskFactory();
+        private static TaskFactory taskFactory = new TaskFactory();
 
         //Locks
-        private Object lockerPost = new Object();
-        private Object lockerImage = new Object();
+        private static Object lockerPost = new Object();
+        private static Object lockerImage = new Object();
 
-        private void Start(int userId)
+        private static void Start(int userId)
         {
             string completeUrl = MESSAGE_URL + userId + '/';
 
             //First Task
-            textBoxTop.AppendText("---GETTING POST PAGE NUMBER 1---");
-            textBoxTop.AppendText(Environment.NewLine);
+            Console.WriteLine("---GETTING POST PAGE NUMBER 1---\n");
             HandlePostListDocument(completeUrl);
         }
 
         //TAP Asynchronous Web Request for LMB Document
-        private async Task<WebResponse> GetRequestStreamAsync(string url)
+        private async static Task<WebResponse> GetRequestStreamAsync(string url)
         {
             var request = (System.Net.HttpWebRequest)WebRequest.Create(url);
             request.CookieContainer = new CookieContainer();
@@ -89,9 +60,9 @@ namespace LMB_Archivist_Formed
         }
 
         //Handle post-list page from web request.
-        private async void HandlePostListDocument(string url)
+        private static async void HandlePostListDocument(string url)
         {
-            var doc = new HtmlAgilityPack.HtmlDocument();   //Document
+            var doc = new HtmlDocument();   //Document
             var webResponse = await GetRequestStreamAsync(url);
             doc.Load(webResponse.GetResponseStream());
             webResponse.Close();
@@ -103,7 +74,7 @@ namespace LMB_Archivist_Formed
             {
                 username = docNode.QuerySelector("a.lia-user-name-link").FirstChild.InnerHtml;
                 Directory.CreateDirectory(SAVE_LOCATION + username + "/");
-                var overview = new HtmlAgilityPack.HtmlDocument();
+                var overview = new HtmlDocument();
                 overview.Load("assets/overview.html");
                 overview.DocumentNode.QuerySelector("h1").InnerHtml += "Posts For " + username;
                 overview.Save(SAVE_LOCATION + "overview-" + username + ".html");
@@ -141,22 +112,21 @@ namespace LMB_Archivist_Formed
                     int pageNumber = 0;
                     Int32.TryParse(Regex.Match(cssClass, @"\d+$").Value, out pageNumber);
 
-                    textBoxTop.AppendText("---GETTING POST PAGE NUMBER " + pageNumber + "---");
-                    textBoxTop.AppendText(Environment.NewLine);
+                    Console.WriteLine("---GETTING POST PAGE NUMBER " + pageNumber + "---\n");
                 }
             }
 
             //Get the next list page
-            #pragma warning disable 4014
+#pragma warning disable 4014
             Task.Run(() => HandlePostListDocument(next.GetAttributeValue("href", ""))).ConfigureAwait(false);
-            #pragma warning restore 4014
+#pragma warning restore 4014
         }
 
         //Handle post page from web request
-        private async void HandlePostDocument(string url)
+        private static async void HandlePostDocument(string url)
         {
             //Read the document from the request result
-            var doc = new HtmlAgilityPack.HtmlDocument();   //Document
+            var doc = new HtmlDocument();   //Document
             var webResponse = await GetRequestStreamAsync(url);
             doc.Load(webResponse.GetResponseStream());
             webResponse.Close();
@@ -165,16 +135,14 @@ namespace LMB_Archivist_Formed
 
             var postId = Regex.Match(url, @"m-p\/\d+").Value.Replace("m-p/", "");
 
-            textBoxBottom.AppendText("---ACQUIRED POST OF ID: " + postId + "---");
-            textBoxBottom.AppendText(Environment.NewLine);
+            Console.WriteLine("---ACQUIRED POST OF ID: " + postId + "---\n");
 
             //Node of post
             var post = docNode.QuerySelector("div.message-uid-" + postId);
 
             if (post == null)
             {
-                textBoxBottom.AppendText("---POST OF ID: " + postId + " REQUIRES LOGIN. CANNOT GET.---");
-                textBoxBottom.AppendText(Environment.NewLine);
+                Console.WriteLine("---POST OF ID: " + postId + " REQUIRES LOGIN. CANNOT GET.---\n");
                 return; //Post requires login. Ignore it.
             }
 
@@ -196,9 +164,9 @@ namespace LMB_Archivist_Formed
 
                 if (!File.Exists("output/" + imageFileLocation))
                 {
-                    #pragma warning disable 4014
+#pragma warning disable 4014
                     Task.Run(() => HandleImageAsset(src)).ConfigureAwait(false);
-                    #pragma warning restore 4014
+#pragma warning restore 4014
                 }
             }
 
@@ -218,7 +186,7 @@ namespace LMB_Archivist_Formed
             lock (lockerPost)
             {
                 //Save overview document
-                var overview = new HtmlAgilityPack.HtmlDocument();
+                var overview = new HtmlDocument();
                 overview.Load(SAVE_LOCATION + "overview-" + username + ".html", Encoding.UTF8);
                 overview.DocumentNode.QuerySelector("ul").InnerHtml +=
                     "<li><a href=\"" + username + "/" + postFileName + "\">" + postFileName + "</a></li>\n";
@@ -226,14 +194,14 @@ namespace LMB_Archivist_Formed
             }
 
             //Save post document
-            var output = new HtmlAgilityPack.HtmlDocument();
+            var output = new HtmlDocument();
             output.Load("assets/default.html");
             output.DocumentNode.QuerySelector("div.even-row").AppendChild(post);
             output.Save(SAVE_LOCATION + username + "/" + postFileName);
         }
 
         //Write Image from Web Response
-        private async void HandleImageAsset(string url)
+        private static async void HandleImageAsset(string url)
         {
             //Compatibility for older LMB emotes that still hang around for SOME reason.
             if (url.StartsWith("/html/"))
@@ -259,7 +227,7 @@ namespace LMB_Archivist_Formed
         }
 
         //Replace illegal characters in given file path
-        private string legalizeFilePath(string filePath)
+        private static string legalizeFilePath(string filePath)
         {
             string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
             Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
@@ -267,7 +235,7 @@ namespace LMB_Archivist_Formed
         }
 
         //Get the date from an LMB HtmlNode
-        private string GetDateFromNode(HtmlNode docNode)
+        private static string GetDateFromNode(HtmlNode docNode)
         {
             var date = "";
 

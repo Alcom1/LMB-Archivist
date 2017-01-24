@@ -31,8 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.button_archive = new System.Windows.Forms.Button();
-            this.textBox_output = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxBottom = new System.Windows.Forms.TextBox();
+            this.textBoxTop = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.archive_post_panel = new System.Windows.Forms.Panel();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
@@ -65,33 +65,33 @@
             this.button_archive.Text = "ARCHIVE!";
             this.button_archive.UseVisualStyleBackColor = true;
             // 
-            // textBox_output
+            // textBoxBottom
             // 
-            this.textBox_output.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBoxBottom.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_output.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox_output.Location = new System.Drawing.Point(4, 101);
-            this.textBox_output.Multiline = true;
-            this.textBox_output.Name = "textBox_output";
-            this.textBox_output.ReadOnly = true;
-            this.textBox_output.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox_output.Size = new System.Drawing.Size(477, 141);
-            this.textBox_output.TabIndex = 5;
+            this.textBoxBottom.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxBottom.Location = new System.Drawing.Point(4, 101);
+            this.textBoxBottom.Multiline = true;
+            this.textBoxBottom.Name = "textBoxBottom";
+            this.textBoxBottom.ReadOnly = true;
+            this.textBoxBottom.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxBottom.Size = new System.Drawing.Size(477, 141);
+            this.textBoxBottom.TabIndex = 5;
             // 
-            // textBox1
+            // textBoxTop
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBoxTop.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(4, 4);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(477, 90);
-            this.textBox1.TabIndex = 8;
+            this.textBoxTop.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxTop.Location = new System.Drawing.Point(4, 4);
+            this.textBoxTop.Multiline = true;
+            this.textBoxTop.Name = "textBoxTop";
+            this.textBoxTop.ReadOnly = true;
+            this.textBoxTop.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBoxTop.Size = new System.Drawing.Size(477, 90);
+            this.textBoxTop.TabIndex = 8;
             // 
             // tableLayoutPanel1
             // 
@@ -102,8 +102,8 @@
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.4138F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.58621F));
-            this.tableLayoutPanel1.Controls.Add(this.textBox_output, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.textBox1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxBottom, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxTop, 0, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(13, 254);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
@@ -314,8 +314,8 @@
         #endregion
 
         private System.Windows.Forms.Button button_archive;
-        private System.Windows.Forms.TextBox textBox_output;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxBottom;
+        private System.Windows.Forms.TextBox textBoxTop;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Panel archive_post_panel;
         private System.Windows.Forms.Panel archive_topic_panel;

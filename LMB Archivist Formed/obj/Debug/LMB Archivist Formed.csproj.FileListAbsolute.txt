@@ -7,3 +7,22 @@ C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\obj\Debug\LMB 
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\obj\Debug\LMB Archivist Formed.exe
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\obj\Debug\LMB Archivist Formed.pdb
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\obj\Debug\LMB_Archivist_Formed.Form1.resources
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\assets\default.html
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\assets\overview.html
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\output\css\avatar-author-bg.png
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\output\css\blue-button-bg.png
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\output\css\body-bg.png
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\output\css\browse-forum-bg.png
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\output\css\like.png
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\output\css\speech-triangle-left.png
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\output\css\blob.css
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\output\css\main.css
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\output\css\mod.css
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\output\css\overview.css
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\Fizzler.dll
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\Fizzler.Systems.HtmlAgilityPack.dll
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\HtmlAgilityPack.dll
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\Fizzler.xml
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\Fizzler.Systems.HtmlAgilityPack.xml
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\HtmlAgilityPack.xml
