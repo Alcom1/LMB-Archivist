@@ -17,32 +17,24 @@ using System.Reflection;
 
 namespace LMB_Archivist_Formed
 {
+    enum ArchiveButtonState
+    {
+        Stopped,
+        AreSure,
+        Running,
+    }
+
+    enum ArchiveOptions
+    {
+        None,
+        SaveUserPosts,
+        SaveUserPages,
+        SaveUserTopics,
+        SaveTopics
+    }
+
     public partial class Form1 : Form
     {
-        public Form1()
-        {
-            InitializeComponent();
-            Start(349888);
-        }
-
-        private void archive_post_radio_CheckedChanged(object sender, EventArgs e)
-        {
-            changeArchiveMode();
-        }
-
-        private void archive_topic_radio_CheckedChanged(object sender, EventArgs e)
-        {
-            changeArchiveMode();
-        }
-
-        private void changeArchiveMode()
-        {
-            this.archive_post_panel.Enabled = this.archive_post_radio.Checked;
-            this.archive_topic_panel.Enabled = this.archive_topic_radio.Checked;
-
-            this.button_archive.Enabled = true;
-        }
-
         //Base LMB URL
         private const string BASE_URL = "https://community.lego.com/";
 
@@ -68,14 +60,158 @@ namespace LMB_Archivist_Formed
         private Object lockerPost = new Object();
         private Object lockerImage = new Object();
 
-        private void Start(int userId)
-        {
-            string completeUrl = MESSAGE_URL + userId + '/';
+        //Enums
+        private ArchiveButtonState buttonState;
 
-            //First Task
-            textBoxTop.AppendText("---GETTING POST PAGE NUMBER 1---");
-            textBoxTop.AppendText(Environment.NewLine);
-            HandlePostListDocument(completeUrl);
+        //
+        public Form1()
+        {
+            InitializeComponent();
+            //Start(349888);
+
+            buttonState = ArchiveButtonState.Stopped;
+        }
+
+        //
+        private void archive_post_radio_CheckedChanged(object sender, EventArgs e)
+        {
+            changeArchiveMode();
+        }
+
+        //
+        private void archive_topic_radio_CheckedChanged(object sender, EventArgs e)
+        {
+            changeArchiveMode();
+        }
+
+        //
+        private void archive_radio_posts_CheckedChanged(object sender, EventArgs e)
+        {
+            archive_radio_pages.Checked = false;
+            archive_radio_topics.Checked = false;
+        }
+
+        //
+        private void archive_radio_pages_CheckedChanged(object sender, EventArgs e)
+        {
+            archive_radio_posts.Checked = false;
+            archive_radio_topics.Checked = false;
+        }
+
+        //
+        private void archive_radio_topics_CheckedChanged(object sender, EventArgs e)
+        {
+            archive_radio_posts.Checked = false;
+            archive_radio_pages.Checked = false;
+        }
+
+        //
+        private void changeArchiveMode()
+        {
+            this.archive_post_panel.Enabled = this.archive_post_radio.Checked;
+            this.archive_topic_panel.Enabled = this.archive_topic_radio.Checked;
+
+            this.button_archive.Enabled = true;
+        }
+        
+        //Start button
+        private void button_archive_Click(object sender, EventArgs e)
+        {
+            switch(buttonState)
+            {
+                case ArchiveButtonState.Stopped:
+                    textBoxTop.Text = "";
+                    textBoxBottom.Text = "";
+
+                    int userId;
+
+                    if (int.TryParse(textBoxUserId.Text, out userId))
+                    {
+                        string completeUrl = MESSAGE_URL + userId + '/';
+
+                        //Start Task
+                        Print(textBoxTop, "---GETTING POST PAGE NUMBER 1---");
+                        HandlePostListDocument(completeUrl);
+                        
+                        buttonState = ArchiveButtonState.Running;
+                        button_archive.Text = "ARCHIVING!";
+
+                        //Disable everything
+                        this.archive_post_panel.Enabled = false;
+                        this.archive_topic_panel.Enabled = false;
+                        this.archive_post_radio.Enabled = false;
+                        this.archive_topic_radio.Enabled = false;
+                    }
+                    else
+                    {
+                        Print(textBoxTop, "---INVALID USER ID: " + textBoxUserId.Text + "---");
+                    }
+                    break;
+
+                case ArchiveButtonState.Running:
+                    buttonState = ArchiveButtonState.AreSure;
+                    button_archive.Text = "Cancel and Quit?";
+                    Task.Delay(3000).ContinueWith(t => ResetButtonToRunning());
+                    break;
+
+                case ArchiveButtonState.AreSure:
+                    Application.Exit();
+                    break;
+            }
+        }
+
+        //Return button from an "Are you sure" state to a running state.
+        private void ResetButtonToRunning()
+        {
+            if(buttonState == ArchiveButtonState.AreSure)
+            {
+                //Thread safety
+                if (this.InvokeRequired)
+                {
+                    Invoke(new MethodInvoker(delegate () {
+                        ResetButtonToRunning();
+                    }));
+                }
+                else
+                {
+                    buttonState = ArchiveButtonState.Running;
+                    button_archive.Text = "ARCHIVING!";
+                }
+            }
+        }
+
+        //Return button to a stopped state
+        private void ResetButtonToStopped()
+        {
+            //Thread safety
+            if (this.InvokeRequired)
+            {
+                Invoke(new MethodInvoker(delegate () {
+                    ResetButtonToStopped();
+                }));
+            }
+            else
+            {
+                buttonState = ArchiveButtonState.Stopped;
+                button_archive.Text = "START ARCHIVE!";
+            }
+        }
+
+        //Print text in a provided text box.
+        private void Print(TextBox textBox, string message)
+        {
+            //Thread safety
+            if (this.InvokeRequired)
+            {
+                Invoke(new MethodInvoker(delegate () {
+                    Print(textBox, message);
+                }));
+            }
+            else
+            {
+                textBox.AppendText(message);
+                textBox.AppendText(Environment.NewLine);
+            }
         }
 
         //TAP Asynchronous Web Request for LMB Document
@@ -101,10 +237,27 @@ namespace LMB_Archivist_Formed
             //Set Save Location based on username, but only for the first page
             if (!Regex.Match(url, @"\d+$").Success)
             {
+                var usernameLink = docNode.QuerySelector("a.lia-user-name-link");
+
+                if(usernameLink == null)
+                {
+                    ResetButtonToStopped();
+                    Print(textBoxTop, "---USER HAS NO POSTS---");
+
+                    //Should still happen on UI thread, don't bother with invokes.
+                    this.archive_post_radio.Enabled = true;
+                    this.archive_topic_radio.Enabled = true;
+                    this.archive_post_radio.Checked = false;
+                    this.archive_topic_radio.Checked = false;
+
+                    return;
+                }
+
                 username = docNode.QuerySelector("a.lia-user-name-link").FirstChild.InnerHtml;
                 Directory.CreateDirectory(SAVE_LOCATION + username + "/");
+                Directory.CreateDirectory(SAVE_LOCATION + SAVE_IMAGE_LOCATION);
                 var overview = new HtmlAgilityPack.HtmlDocument();
-                overview.Load("assets/overview.html");
+                overview.Load(ASSET_LOCATION + "overview.html");
                 overview.DocumentNode.QuerySelector("h1").InnerHtml += "Posts For " + username;
                 overview.Save(SAVE_LOCATION + "overview-" + username + ".html");
             }
@@ -141,8 +294,7 @@ namespace LMB_Archivist_Formed
                     int pageNumber = 0;
                     Int32.TryParse(Regex.Match(cssClass, @"\d+$").Value, out pageNumber);
 
-                    textBoxTop.AppendText("---GETTING POST PAGE NUMBER " + pageNumber + "---");
-                    textBoxTop.AppendText(Environment.NewLine);
+                    Print(textBoxTop, "---GETTING POST PAGE NUMBER " + pageNumber + "---");
                 }
             }
 
@@ -165,16 +317,14 @@ namespace LMB_Archivist_Formed
 
             var postId = Regex.Match(url, @"m-p\/\d+").Value.Replace("m-p/", "");
 
-            textBoxBottom.AppendText("---ACQUIRED POST OF ID: " + postId + "---");
-            textBoxBottom.AppendText(Environment.NewLine);
+            Print(textBoxBottom, "---ACQUIRED POST OF ID: " + postId + "---");
 
             //Node of post
             var post = docNode.QuerySelector("div.message-uid-" + postId);
 
             if (post == null)
             {
-                textBoxBottom.AppendText("---POST OF ID: " + postId + " REQUIRES LOGIN. CANNOT GET.---");
-                textBoxBottom.AppendText(Environment.NewLine);
+                Print(textBoxBottom, "---POST OF ID: " + postId + " REQUIRES LOGIN. CANNOT GET.---");
                 return; //Post requires login. Ignore it.
             }
 
@@ -227,7 +377,7 @@ namespace LMB_Archivist_Formed
 
             //Save post document
             var output = new HtmlAgilityPack.HtmlDocument();
-            output.Load("assets/default.html");
+            output.Load(ASSET_LOCATION + "default.html");
             output.DocumentNode.QuerySelector("div.even-row").AppendChild(post);
             output.Save(SAVE_LOCATION + username + "/" + postFileName);
         }
@@ -299,6 +449,11 @@ namespace LMB_Archivist_Formed
             }
 
             return date;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
