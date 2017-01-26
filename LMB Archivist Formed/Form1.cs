@@ -136,7 +136,7 @@ namespace LMB_Archivist_Formed
                         string completeUrl = MESSAGE_URL + userId + '/';
 
                         //Start Task
-                        Print(textBoxTop, "GETTING POST PAGE NUMBER 1");
+                        Print(textBoxBottom, "GETTING POST PAGE NUMBER 1");
                         HandlePostListDocument(completeUrl);
                         
                         buttonState = ArchiveButtonState.Running;
@@ -348,7 +348,7 @@ namespace LMB_Archivist_Formed
                     int pageNumber = 0;
                     Int32.TryParse(Regex.Match(cssClass, @"\d+$").Value, out pageNumber);
 
-                    Print(textBoxTop, "GETTING POST PAGE NUMBER " + pageNumber + "");
+                    Print(textBoxBottom, "GETTING POST PAGE NUMBER " + pageNumber + "");
                 }
             }
 
