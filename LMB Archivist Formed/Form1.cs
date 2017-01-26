@@ -63,6 +63,12 @@ namespace LMB_Archivist_Formed
         //Enums
         private ArchiveButtonState buttonState;
 
+        //Counters
+        private int postCount = 0;
+        private int postCounter = 0;
+        private int pageCount = 0;
+        private int pageCounter = 0;
+
         //
         public Form1()
         {
@@ -130,7 +136,7 @@ namespace LMB_Archivist_Formed
                         string completeUrl = MESSAGE_URL + userId + '/';
 
                         //Start Task
-                        Print(textBoxTop, "---GETTING POST PAGE NUMBER 1---");
+                        Print(textBoxTop, "GETTING POST PAGE NUMBER 1");
                         HandlePostListDocument(completeUrl);
                         
                         buttonState = ArchiveButtonState.Running;
@@ -144,7 +150,7 @@ namespace LMB_Archivist_Formed
                     }
                     else
                     {
-                        Print(textBoxTop, "---INVALID USER ID: " + textBoxUserId.Text + "---");
+                        Print(textBoxTop, "INVALID USER ID: " + textBoxUserId.Text + "");
                     }
                     break;
 
@@ -197,6 +203,27 @@ namespace LMB_Archivist_Formed
             }
         }
 
+        //Set finished state for when finished
+        private void SetFinished()
+        {
+            //Thread safety
+            if (this.InvokeRequired)
+            {
+                Invoke(new MethodInvoker(delegate () {
+                    SetFinished();
+                }));
+            }
+            else
+            {
+                buttonState = ArchiveButtonState.Stopped;
+                button_archive.Text = "START ARCHIVE!";
+                this.archive_post_radio.Enabled = true;
+                this.archive_topic_radio.Enabled = true;
+                this.archive_post_panel.Enabled = this.archive_post_radio.Checked;
+                this.archive_topic_panel.Enabled = this.archive_topic_radio.Checked;
+            }
+        }
+
         //Print text in a provided text box.
         private void Print(TextBox textBox, string message)
         {
@@ -238,11 +265,11 @@ namespace LMB_Archivist_Formed
             if (!Regex.Match(url, @"\d+$").Success)
             {
                 var usernameLink = docNode.QuerySelector("a.lia-user-name-link");
-
+                
                 if(usernameLink == null)
                 {
                     ResetButtonToStopped();
-                    Print(textBoxTop, "---USER HAS NO POSTS---");
+                    Print(textBoxTop, "USER HAS NO POSTS");
 
                     //Should still happen on UI thread, don't bother with invokes.
                     this.archive_post_radio.Enabled = true;
@@ -277,12 +304,39 @@ namespace LMB_Archivist_Formed
             }
 
             //Node containing link for the next post-list
-            var next = docNode.QuerySelector("li.lia-paging-page-next").QuerySelector("a.lia-link-navigation");
+            var next = docNode.QuerySelector("li.lia-paging-page-next");
 
-            //Return if no list page after this one
+            //Return if only one list page
             if (next == null)
             {
+                postCount = docNode.QuerySelectorAll("span.lia-message-unread").Count();
+                Print(textBoxTop, "POST COUNT : " + postCount + "");
+
                 return;
+            }
+            else
+            {
+                next = next.QuerySelector("a.lia-link-navigation");
+
+                //Return if no list page after this one
+                if (next == null)
+                {
+                    var kek = docNode.QuerySelectorAll("span.lia-message-unread").Count();
+                    postCount += docNode.QuerySelectorAll("span.lia-message-unread").Count() - 20;
+                    Print(textBoxTop, "FINAL POST COUNT : " + postCount + "");
+
+                    return;
+                }
+
+                //There is a next page, so if this is the first page
+                else if(!Regex.Match(url, @"\d+$").Success)
+                {
+                    //HtmlAgilityPack seems to treat whitespace as children(?), so the logic here is a lot more silly than it should be.
+                    var pagingList = docNode.QuerySelector("ul.lia-paging-full-pages").ChildNodes;
+                    int.TryParse(pagingList[pagingList.Count - 2].ChildNodes[1].InnerHtml, out postCount);
+                    postCount *= 20;
+                    Print(textBoxTop, "POST ESTIMATE : ~" + postCount + "");
+                }
             }
 
             //Page number stuff
@@ -294,7 +348,7 @@ namespace LMB_Archivist_Formed
                     int pageNumber = 0;
                     Int32.TryParse(Regex.Match(cssClass, @"\d+$").Value, out pageNumber);
 
-                    Print(textBoxTop, "---GETTING POST PAGE NUMBER " + pageNumber + "---");
+                    Print(textBoxTop, "GETTING POST PAGE NUMBER " + pageNumber + "");
                 }
             }
 
@@ -317,14 +371,14 @@ namespace LMB_Archivist_Formed
 
             var postId = Regex.Match(url, @"m-p\/\d+").Value.Replace("m-p/", "");
 
-            Print(textBoxBottom, "---ACQUIRED POST OF ID: " + postId + "---");
+            Print(textBoxBottom, "ACQUIRED POST OF ID: " + postId + "");
 
             //Node of post
             var post = docNode.QuerySelector("div.message-uid-" + postId);
 
             if (post == null)
             {
-                Print(textBoxBottom, "---POST OF ID: " + postId + " REQUIRES LOGIN. CANNOT GET.---");
+                Print(textBoxBottom, "POST OF ID: " + postId + " REQUIRES LOGIN. CANNOT GET.");
                 return; //Post requires login. Ignore it.
             }
 
@@ -380,6 +434,14 @@ namespace LMB_Archivist_Formed
             output.Load(ASSET_LOCATION + "default.html");
             output.DocumentNode.QuerySelector("div.even-row").AppendChild(post);
             output.Save(SAVE_LOCATION + username + "/" + postFileName);
+
+            postCounter++;
+
+            if(postCounter >= postCount && postCount != 0)
+            {
+                SetFinished();
+                Print(textBoxTop, "ARCHIVE TASK COMPLETED");
+            }
         }
 
         //Write Image from Web Response
@@ -449,11 +511,6 @@ namespace LMB_Archivist_Formed
             }
 
             return date;
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
