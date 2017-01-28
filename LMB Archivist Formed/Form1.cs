@@ -321,7 +321,7 @@ namespace LMB_Archivist_Formed
                 //Return if no list page after this one
                 if (next == null)
                 {
-                    var kek = docNode.QuerySelectorAll("span.lia-message-unread").Count();
+                    //Calculate final post count based on the final page.
                     postCount += docNode.QuerySelectorAll("span.lia-message-unread").Count() - 20;
                     Print(textBoxTop, "FINAL POST COUNT : " + postCount + "");
 
@@ -331,9 +331,7 @@ namespace LMB_Archivist_Formed
                 //There is a next page, so if this is the first page
                 else if(!Regex.Match(url, @"\d+$").Success)
                 {
-                    //HtmlAgilityPack seems to treat whitespace as children(?), so the logic here is a lot more silly than it should be.
-                    var pagingList = docNode.QuerySelector("ul.lia-paging-full-pages").ChildNodes;
-                    int.TryParse(pagingList[pagingList.Count - 2].ChildNodes[1].InnerHtml, out postCount);
+                    int.TryParse(docNode.QuerySelectorAll("[class^=lia-js-data-pageNum-]").Last().InnerHtml, out postCount);
                     postCount *= 20;
                     Print(textBoxTop, "POST ESTIMATE : ~" + postCount + "");
                 }
@@ -379,6 +377,7 @@ namespace LMB_Archivist_Formed
             if (post == null)
             {
                 Print(textBoxBottom, "POST OF ID: " + postId + " REQUIRES LOGIN. CANNOT GET.");
+                incrementPostCounter();
                 return; //Post requires login. Ignore it.
             }
 
@@ -435,9 +434,15 @@ namespace LMB_Archivist_Formed
             output.DocumentNode.QuerySelector("div.even-row").AppendChild(post);
             output.Save(SAVE_LOCATION + username + "/" + postFileName);
 
+            incrementPostCounter();
+        }
+
+        //Increment the post counter. Should be called when a post task is done.
+        private void incrementPostCounter()
+        {
             postCounter++;
 
-            if(postCounter >= postCount && postCount != 0)
+            if (postCounter >= postCount && postCount != 0)
             {
                 SetFinished();
                 Print(textBoxTop, "ARCHIVE TASK COMPLETED");
