@@ -24,7 +24,7 @@ namespace LMB_Archivist_Formed
         Running,
     }
 
-    enum ArchiveOptions
+    enum ArchiveOptionState
     {
         None,
         SaveUserPosts,
@@ -62,6 +62,7 @@ namespace LMB_Archivist_Formed
 
         //Enums
         private ArchiveButtonState buttonState;
+        private ArchiveOptionState optionState;
 
         //Counters
         private int postCount = 0;
@@ -82,33 +83,41 @@ namespace LMB_Archivist_Formed
         private void archive_post_radio_CheckedChanged(object sender, EventArgs e)
         {
             changeArchiveMode();
+            optionState = ArchiveOptionState.SaveUserPosts;
         }
 
         //
         private void archive_topic_radio_CheckedChanged(object sender, EventArgs e)
         {
             changeArchiveMode();
+            optionState = ArchiveOptionState.SaveTopics;
         }
 
         //
-        private void archive_radio_posts_CheckedChanged(object sender, EventArgs e)
+        private void archive_radio_posts_CheckedChanged(object sender, EventArgs e)  
         {
+            if(archive_radio_posts.Checked == false) { return; }
             archive_radio_pages.Checked = false;
             archive_radio_topics.Checked = false;
+            optionState = ArchiveOptionState.SaveUserPosts;
         }
 
         //
         private void archive_radio_pages_CheckedChanged(object sender, EventArgs e)
         {
+            if (archive_radio_pages.Checked == false) { return; }
             archive_radio_posts.Checked = false;
             archive_radio_topics.Checked = false;
+            optionState = ArchiveOptionState.SaveUserPages;
         }
 
         //
         private void archive_radio_topics_CheckedChanged(object sender, EventArgs e)
         {
+            if (archive_radio_topics.Checked == false) { return; }
             archive_radio_posts.Checked = false;
             archive_radio_pages.Checked = false;
+            optionState = ArchiveOptionState.SaveUserTopics;
         }
 
         //
@@ -128,29 +137,45 @@ namespace LMB_Archivist_Formed
                 case ArchiveButtonState.Stopped:
                     textBoxTop.Text = "";
                     textBoxBottom.Text = "";
-
-                    int userId;
-
-                    if (int.TryParse(textBoxUserId.Text, out userId))
+                    switch(optionState)
                     {
-                        string completeUrl = MESSAGE_URL + userId + '/';
+                        case ArchiveOptionState.SaveUserPosts:
+                            int userId;
 
-                        //Start Task
-                        Print(textBoxBottom, "GETTING POST PAGE NUMBER 1");
-                        HandlePostListDocument(completeUrl);
-                        
-                        buttonState = ArchiveButtonState.Running;
-                        button_archive.Text = "ARCHIVING!";
+                            if (int.TryParse(textBoxUserId.Text, out userId))
+                            {
+                                string completeUrl = MESSAGE_URL + userId + '/';
 
-                        //Disable everything
-                        this.archive_post_panel.Enabled = false;
-                        this.archive_topic_panel.Enabled = false;
-                        this.archive_post_radio.Enabled = false;
-                        this.archive_topic_radio.Enabled = false;
-                    }
-                    else
-                    {
-                        Print(textBoxTop, "INVALID USER ID: " + textBoxUserId.Text + "");
+                                //Start Task
+                                Print(textBoxBottom, "GETTING POST PAGE NUMBER 1");
+                                HandlePostListDocument(completeUrl);
+
+                                buttonState = ArchiveButtonState.Running;
+                                button_archive.Text = "ARCHIVING!";
+
+                                //Disable everything
+                                this.archive_post_panel.Enabled = false;
+                                this.archive_topic_panel.Enabled = false;
+                                this.archive_post_radio.Enabled = false;
+                                this.archive_topic_radio.Enabled = false;
+                            }
+                            else
+                            {
+                                Print(textBoxTop, "INVALID USER ID: " + textBoxUserId.Text);
+                            }
+                            break;
+
+                        case ArchiveOptionState.SaveUserPages:
+                            Print(textBoxTop, "UNIMPLEMENTED FEATURE : ARCHIVE USER PAGES");
+                            break;
+
+                        case ArchiveOptionState.SaveUserTopics:
+                            Print(textBoxTop, "UNIMPLEMENTED FEATURE : ARCHIVE USER TOPICS");
+                            break;
+
+                        case ArchiveOptionState.SaveTopics:
+                            Print(textBoxTop, "UNIMPLEMENTED FEATURE : ARCHIVE URL TOPIC");
+                            break;
                     }
                     break;
 
@@ -323,7 +348,7 @@ namespace LMB_Archivist_Formed
                 {
                     //Calculate final post count based on the final page.
                     postCount += docNode.QuerySelectorAll("span.lia-message-unread").Count() - 20;
-                    Print(textBoxTop, "FINAL POST COUNT : " + postCount + "");
+                    Print(textBoxTop, "FINAL POST COUNT : " + postCount);
 
                     return;
                 }
@@ -333,7 +358,7 @@ namespace LMB_Archivist_Formed
                 {
                     int.TryParse(docNode.QuerySelectorAll("[class^=lia-js-data-pageNum-]").Last().InnerHtml, out postCount);
                     postCount *= 20;
-                    Print(textBoxTop, "POST ESTIMATE : ~" + postCount + "");
+                    Print(textBoxTop, "POST ESTIMATE : ~" + postCount);
                 }
             }
 
@@ -346,7 +371,7 @@ namespace LMB_Archivist_Formed
                     int pageNumber = 0;
                     Int32.TryParse(Regex.Match(cssClass, @"\d+$").Value, out pageNumber);
 
-                    Print(textBoxBottom, "GETTING POST PAGE NUMBER " + pageNumber + "");
+                    Print(textBoxBottom, "GETTING POST PAGE NUMBER " + pageNumber);
                 }
             }
 
@@ -369,7 +394,7 @@ namespace LMB_Archivist_Formed
 
             var postId = Regex.Match(url, @"m-p\/\d+").Value.Replace("m-p/", "");
 
-            Print(textBoxBottom, "ACQUIRED POST OF ID: " + postId + "");
+            Print(textBoxBottom, "ACQUIRED POST OF ID: " + postId);
 
             //Node of post
             var post = docNode.QuerySelector("div.message-uid-" + postId);

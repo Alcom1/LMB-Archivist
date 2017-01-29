@@ -81,7 +81,7 @@
             this.textBoxBottom.Name = "textBoxBottom";
             this.textBoxBottom.ReadOnly = true;
             this.textBoxBottom.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxBottom.Size = new System.Drawing.Size(477, 113);
+            this.textBoxBottom.Size = new System.Drawing.Size(477, 108);
             this.textBoxBottom.TabIndex = 5;
             // 
             // textBoxTop
@@ -119,7 +119,6 @@
             // 
             this.archive_radio_topics.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.archive_radio_topics.AutoSize = true;
-            this.archive_radio_topics.Enabled = false;
             this.archive_radio_topics.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.archive_radio_topics.Location = new System.Drawing.Point(327, 31);
             this.archive_radio_topics.Margin = new System.Windows.Forms.Padding(6);
@@ -128,12 +127,12 @@
             this.archive_radio_topics.TabIndex = 19;
             this.archive_radio_topics.Text = "Archive Entire Topics";
             this.archive_radio_topics.UseVisualStyleBackColor = true;
+            this.archive_radio_topics.CheckedChanged += new System.EventHandler(this.archive_radio_topics_CheckedChanged);
             // 
             // archive_radio_pages
             // 
             this.archive_radio_pages.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.archive_radio_pages.AutoSize = true;
-            this.archive_radio_pages.Enabled = false;
             this.archive_radio_pages.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.archive_radio_pages.Location = new System.Drawing.Point(170, 31);
             this.archive_radio_pages.Margin = new System.Windows.Forms.Padding(6);
@@ -147,13 +146,14 @@
             // archive_radio_posts
             // 
             this.archive_radio_posts.AutoSize = true;
-            this.archive_radio_posts.Enabled = false;
+            this.archive_radio_posts.Checked = true;
             this.archive_radio_posts.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.archive_radio_posts.Location = new System.Drawing.Point(6, 31);
             this.archive_radio_posts.Margin = new System.Windows.Forms.Padding(6);
             this.archive_radio_posts.Name = "archive_radio_posts";
             this.archive_radio_posts.Size = new System.Drawing.Size(155, 17);
             this.archive_radio_posts.TabIndex = 15;
+            this.archive_radio_posts.TabStop = true;
             this.archive_radio_posts.Text = "Archive Individal Posts";
             this.archive_radio_posts.UseVisualStyleBackColor = true;
             this.archive_radio_posts.CheckedChanged += new System.EventHandler(this.archive_radio_posts_CheckedChanged);
