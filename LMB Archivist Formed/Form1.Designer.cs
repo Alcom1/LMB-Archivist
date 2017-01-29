@@ -81,7 +81,7 @@
             this.textBoxBottom.Name = "textBoxBottom";
             this.textBoxBottom.ReadOnly = true;
             this.textBoxBottom.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxBottom.Size = new System.Drawing.Size(477, 109);
+            this.textBoxBottom.Size = new System.Drawing.Size(477, 104);
             this.textBoxBottom.TabIndex = 5;
             // 
             // textBoxTop
@@ -326,26 +326,25 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button button_archive;
-        private System.Windows.Forms.TextBox textBoxBottom;
-        private System.Windows.Forms.TextBox textBoxTop;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
-        private System.Windows.Forms.Panel archive_post_panel;
-        private System.Windows.Forms.Panel archive_topic_panel;
-        private System.Windows.Forms.RadioButton archive_post_radio;
-        private System.Windows.Forms.RadioButton archive_topic_radio;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBoxUserId;
-        private System.Windows.Forms.ToolTip toolTip1;
-        private System.Windows.Forms.Label tooltip;
-        private System.Windows.Forms.RadioButton archive_radio_posts;
-        private System.Windows.Forms.RadioButton archive_radio_topics;
-        private System.Windows.Forms.RadioButton archive_radio_pages;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBoxUrl;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        internal System.Windows.Forms.Button button_archive;
+        internal System.Windows.Forms.TextBox textBoxBottom;
+        internal System.Windows.Forms.TextBox textBoxTop;
+        internal System.Windows.Forms.Panel archive_post_panel;
+        internal System.Windows.Forms.Panel archive_topic_panel;
+        internal System.Windows.Forms.RadioButton archive_post_radio;
+        internal System.Windows.Forms.RadioButton archive_topic_radio;
+        internal System.Windows.Forms.Label label1;
+        internal System.Windows.Forms.TextBox textBoxUserId;
+        internal System.Windows.Forms.ToolTip toolTip1;
+        internal System.Windows.Forms.Label tooltip;
+        internal System.Windows.Forms.RadioButton archive_radio_posts;
+        internal System.Windows.Forms.RadioButton archive_radio_topics;
+        internal System.Windows.Forms.RadioButton archive_radio_pages;
+        internal System.Windows.Forms.Label label2;
+        internal System.Windows.Forms.Label label3;
+        internal System.Windows.Forms.TextBox textBoxUrl;
+        internal System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
 
