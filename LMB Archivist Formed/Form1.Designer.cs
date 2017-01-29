@@ -326,7 +326,6 @@
         }
 
         #endregion
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         internal System.Windows.Forms.Button button_archive;
         internal System.Windows.Forms.TextBox textBoxBottom;
         internal System.Windows.Forms.TextBox textBoxTop;

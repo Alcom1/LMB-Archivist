@@ -97,45 +97,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="assets\default.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="assets\overview.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="output\css\avatar-author-bg.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="output\css\blob.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="output\css\blue-button-bg.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="output\css\body-bg.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="output\css\browse-forum-bg.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="output\css\like.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="output\css\main.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="output\css\mod.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="output\css\overview.css">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="output\css\speech-triangle-left.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="assets\topic.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <EmbeddedResource Include="assets\default.html" />
+    <EmbeddedResource Include="assets\overview.html" />
+    <EmbeddedResource Include="output\css\avatar-author-bg.png" />
+    <EmbeddedResource Include="output\css\blob.css" />
+    <EmbeddedResource Include="output\css\blue-button-bg.png" />
+    <EmbeddedResource Include="output\css\body-bg.png" />
+    <EmbeddedResource Include="output\css\browse-forum-bg.png" />
+    <EmbeddedResource Include="output\css\like.png" />
+    <EmbeddedResource Include="output\css\main.css" />
+    <EmbeddedResource Include="output\css\mod.css" />
+    <EmbeddedResource Include="output\css\overview.css" />
+    <EmbeddedResource Include="output\css\speech-triangle-left.png" />
+    <EmbeddedResource Include="assets\topic.html" />
     <Content Include="smile.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

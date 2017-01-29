@@ -54,9 +54,42 @@ namespace LMB_Archivist_Formed
         {
             InitializeComponent(); //Alcom ID = 349888
 
+            ExtractEmbeddedResources();
+
             archiver = new Archiver(this);
 
             buttonState = ArchiveButtonState.Stopped;
+        }
+
+        //Extract all embedded resources to the exe directory.
+        public void ExtractEmbeddedResources()
+        {
+            var executingAssembly = Assembly.GetExecutingAssembly();
+            var resourceNames = executingAssembly.GetManifestResourceNames().ToList();
+
+            resourceNames.RemoveRange(0, 2);
+
+            foreach(var resourceName in resourceNames)
+            {
+                using (Stream stream = executingAssembly.GetManifestResourceStream(resourceName))
+                {
+                    var pseduoName = resourceName.Replace('.', '\\');
+                    var pseduoNameArray = pseduoName.ToCharArray();
+                    pseduoNameArray[pseduoName.LastIndexOf('\\')] = '.';
+                    pseduoName = new string(pseduoNameArray);
+                    pseduoName = pseduoName.Substring(pseduoName.IndexOf('\\') + 1);
+
+                    new FileInfo(pseduoName).Directory.Create();
+                    try
+                    {
+                        stream.CopyTo(new FileStream(pseduoName, FileMode.CreateNew));
+                    }
+                    catch
+                    {
+                        //File probably alread exists
+                    }
+                }
+            }
         }
 
         //
