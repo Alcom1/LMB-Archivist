@@ -191,6 +191,8 @@ namespace LMB_Archivist_Formed
                             }
                             if (url.StartsWith("https://community.lego.com/t5/"))
                             {
+                                archiver.StartTopicArchiving(url);
+
                                 buttonState = ArchiveButtonState.Running;
                                 button_archive.Text = "ARCHIVING!";
 

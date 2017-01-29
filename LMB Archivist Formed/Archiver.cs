@@ -43,15 +43,18 @@ namespace LMB_Archivist_Formed
         private Object lockerPost = new Object();
         private Object lockerImage = new Object();
 
-        //Counters
+        //Counters and finish states
         private int postCount = 0;
         private int postCounter = 0;
         private int imgCount = 0;
+        private bool topicDone = true;
 
         //Constructor
         public Archiver(Form1 form)
         {
             this.form = form;
+
+            Directory.CreateDirectory(SAVE_LOCATION + SAVE_IMAGE_LOCATION);
         }
 
         //Start User Post Archiving
@@ -65,7 +68,7 @@ namespace LMB_Archivist_Formed
         }
 
         //Start Topic Archiving
-        public void StartUserPostArchiving(string url)
+        public void StartTopicArchiving(string url)
         {
             HandleTopicDocument(url, true);
         }
@@ -75,7 +78,8 @@ namespace LMB_Archivist_Formed
         {
             if (
                 imgCount <= 0 &&
-                postCounter >= postCount)
+                postCounter >= postCount &&
+                topicDone)
             {
                 postCount = 0;
                 postCounter = 0;
@@ -123,7 +127,6 @@ namespace LMB_Archivist_Formed
 
                 username = docNode.QuerySelector("a.lia-user-name-link").FirstChild.InnerHtml;
                 Directory.CreateDirectory(SAVE_LOCATION + username + "/");
-                Directory.CreateDirectory(SAVE_LOCATION + SAVE_IMAGE_LOCATION);
                 var overview = new HtmlAgilityPack.HtmlDocument();
                 overview.Load(ASSET_LOCATION + "overview.html");
                 overview.DocumentNode.QuerySelector("h1").InnerHtml += "Posts For " + username;
@@ -280,6 +283,8 @@ namespace LMB_Archivist_Formed
         //Handle topic page.
         private async void HandleTopicDocument(string url, bool cleanExtras = false)
         {
+            topicDone = false;
+
             int pageNum = 1;
 
             //Logic for cleaning extra fluff in URI and getting a page number
@@ -352,6 +357,8 @@ namespace LMB_Archivist_Formed
 
                 if (!File.Exists("output/" + imageFileLocation))
                 {
+                    imgCount++;
+
                     #pragma warning disable 4014
                     Task.Run(() => HandleImageAsset(src)).ConfigureAwait(false);
                     #pragma warning restore 4014
@@ -392,6 +399,7 @@ namespace LMB_Archivist_Formed
             //Return if only one list page
             if (next == null)
             {
+                topicDone = true;
                 CheckSetFinished();
                 return;
             }
@@ -402,6 +410,7 @@ namespace LMB_Archivist_Formed
                 //Return if no list page after this one
                 if (next == null)
                 {
+                    topicDone = true;
                     CheckSetFinished();
                     return;
                 }
@@ -430,27 +439,33 @@ namespace LMB_Archivist_Formed
             {
                 url = BASE_URL + url;
             }
-
-            var webResponse = await GetRequestStreamAsync(url);
-
-            //Prevent interuption when writing post image
-            lock (lockerImage)
+            try
             {
-                //Decrement image count back to zero for each image that is finally archived.
-                imgCount--;
-                CheckSetFinished(); //In case images are archived after posts/topics are done.
+                var webResponse = await GetRequestStreamAsync(url);
 
-                //I don't know, I just copied this off Stack Overflow and it works.
-                using (BinaryReader reader = new BinaryReader(webResponse.GetResponseStream()))
+                //Prevent interuption when writing post image
+                lock (lockerImage)
                 {
-                    Byte[] lnByte = reader.ReadBytes(1 * 1024 * 1024 * 10);
-                    using (FileStream lxFS = new FileStream("output/" + SAVE_IMAGE_LOCATION + Path.GetFileName(url), FileMode.Create))
+                    //I don't know, I just copied this off Stack Overflow and it works.
+                    using (BinaryReader reader = new BinaryReader(webResponse.GetResponseStream()))
                     {
-                        lxFS.Write(lnByte, 0, lnByte.Length);
-                        form.Print(TextBoxChoice.TextBoxBottom, "Saving Image : " + Path.GetFileName(url));
+                        Byte[] lnByte = reader.ReadBytes(1 * 1024 * 1024 * 10);
+                        using (FileStream lxFS = new FileStream("output/" + SAVE_IMAGE_LOCATION + Path.GetFileName(url), FileMode.Create))
+                        {
+                            lxFS.Write(lnByte, 0, lnByte.Length);
+                            form.Print(TextBoxChoice.TextBoxBottom, "Saving Image : " + Path.GetFileName(url));
+                        }
                     }
                 }
             }
+            catch
+            {
+                form.Print(TextBoxChoice.TextBoxBottom, "Failed to save Image : " + Path.GetFileName(url));
+            }
+
+            //Decrement image count back to zero for each image that is finally archived.
+            imgCount--;
+            CheckSetFinished();
         }
 
         //Replace illegal characters in given file path
