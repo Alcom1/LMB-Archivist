@@ -81,7 +81,7 @@
             this.textBoxBottom.Name = "textBoxBottom";
             this.textBoxBottom.ReadOnly = true;
             this.textBoxBottom.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxBottom.Size = new System.Drawing.Size(477, 104);
+            this.textBoxBottom.Size = new System.Drawing.Size(477, 114);
             this.textBoxBottom.TabIndex = 5;
             // 
             // textBoxTop

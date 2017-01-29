@@ -447,6 +447,7 @@ namespace LMB_Archivist_Formed
                     using (FileStream lxFS = new FileStream("output/" + SAVE_IMAGE_LOCATION + Path.GetFileName(url), FileMode.Create))
                     {
                         lxFS.Write(lnByte, 0, lnByte.Length);
+                        form.Print(TextBoxChoice.TextBoxBottom, "Saving Image : " + Path.GetFileName(url));
                     }
                 }
             }
