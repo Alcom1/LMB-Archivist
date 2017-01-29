@@ -47,6 +47,9 @@ namespace LMB_Archivist_Formed
         //Save location for image assets
         private const string SAVE_IMAGE_LOCATION = "images/";
 
+        //Save location for image assets
+        private const string SAVE_TOPIC_LOCATION = "topics/";
+
         //Save location for posts
         private const string SAVE_LOCATION = "output/";
 
@@ -69,6 +72,7 @@ namespace LMB_Archivist_Formed
         private int postCounter = 0;
         private int pageCount = 0;
         private int pageCounter = 0;
+        private int imgCount = 0;
 
         //
         public Form1()
@@ -174,7 +178,29 @@ namespace LMB_Archivist_Formed
                             break;
 
                         case ArchiveOptionState.SaveTopics:
-                            Print(textBoxTop, "UNIMPLEMENTED FEATURE : ARCHIVE URL TOPIC");
+
+                            string url = textBoxUrl.Text;
+                            if(url.StartsWith("community.lego.com/t5/"))
+                            {
+                                url = "https://" + url;
+                            }
+                            if (url.StartsWith("https://community.lego.com/t5/"))
+                            {
+                                HandleTopicDocument(url, true);
+
+                                buttonState = ArchiveButtonState.Running;
+                                button_archive.Text = "ARCHIVING!";
+
+                                //Disable everything
+                                this.archive_post_panel.Enabled = false;
+                                this.archive_topic_panel.Enabled = false;
+                                this.archive_post_radio.Enabled = false;
+                                this.archive_topic_radio.Enabled = false;
+                            }
+                            else
+                            {
+                                Print(textBoxTop, "INVALID URL: " + url);
+                            }
                             break;
                     }
                     break;
@@ -418,12 +444,14 @@ namespace LMB_Archivist_Formed
             {
                 var src = image.GetAttributeValue("src", "");
 
-                string imageFileLocation = SAVE_IMAGE_LOCATION + System.IO.Path.GetFileName(src);
+                string imageFileLocation = SAVE_IMAGE_LOCATION + Path.GetFileName(src);
 
                 image.SetAttributeValue("src", "../" + imageFileLocation);
 
                 if (!File.Exists("output/" + imageFileLocation))
                 {
+                    imgCount++;
+
                     #pragma warning disable 4014
                     Task.Run(() => HandleImageAsset(src)).ConfigureAwait(false);
                     #pragma warning restore 4014
@@ -435,9 +463,6 @@ namespace LMB_Archivist_Formed
 
             //Title of post
             var title = docNode.QuerySelector("h3.custom-title").InnerHtml.Trim('"');
-
-            //Subject of post (unused)
-            //var subject = post.QuerySelector("div.lia-message-subject").ChildNodes[1].InnerHtml;
 
             //Post File Name
             string postFileName = legalizeFilePath(date + "_" + postId + "_" + title) + ".html";
@@ -460,6 +485,138 @@ namespace LMB_Archivist_Formed
             output.Save(SAVE_LOCATION + username + "/" + postFileName);
 
             incrementPostCounter();
+        }
+
+        private async void HandleTopicDocument(string url, bool cleanExtras = false)
+        {
+            int pageNum = 1;
+
+            //Logic for cleaning extra fluff in URI and getting a page number
+            var uri = new Uri(url);
+            var segments = uri.Segments;
+            var killSegments = false;       //True when fluff starts in URI
+
+            //Walk through URI segments
+            for (int i = 0; i < segments.Length; i++)
+            {
+                if(segments[i] == "highlight/")
+                {
+                    killSegments = true;
+                }
+                else if(segments[i] == "page/")
+                {
+                    killSegments = true;
+                    if (segments.Length > i && !cleanExtras)
+                    {
+                        if(int.TryParse(segments[i + 1], out pageNum))
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                //Kill uneeded segments only if we are cleaning the extra stuff.
+                if(killSegments && cleanExtras)
+                {
+                    segments[i] = "";
+                }
+            }
+
+            url = uri.Scheme + "://" + uri.Host + String.Join("", segments);
+
+            //Read the document from the request result
+            var doc = new HtmlAgilityPack.HtmlDocument();   //Document
+            var webResponse = await GetRequestStreamAsync(url);
+            doc.Load(webResponse.GetResponseStream());
+            webResponse.Close();
+
+            var docNode = doc.DocumentNode; //Document Node
+
+            var messageList = docNode.QuerySelector(".message-list");
+            
+            //Modify post document for exporting
+            var quilts = messageList.QuerySelectorAll("div.lia-quilt-column-main-right");
+            foreach(var quilt in quilts)
+            {
+                quilt.QuerySelector("div.lia-quilt-column-alley")
+                    .Attributes["class"].Value = "lia-quilt-column-alley lia-quilt-column-alley-left";
+            }
+
+            var displays = messageList.QuerySelectorAll(".lia-linear-display-message-view");
+            foreach (var display in displays)
+            {
+                display.Attributes["class"].Value = "lia-linear-display-message-view even-row";
+            }
+            
+            var images = messageList.QuerySelectorAll("img");
+
+            //Get images and set the src for them, but not in that order.
+            foreach (HtmlNode image in images)
+            {
+                var src = image.GetAttributeValue("src", "");
+
+                string imageFileLocation = SAVE_IMAGE_LOCATION + Path.GetFileName(src);
+
+                image.SetAttributeValue("src", "../" + imageFileLocation);
+
+                if (!File.Exists("output/" + imageFileLocation))
+                {
+                    #pragma warning disable 4014
+                    Task.Run(() => HandleImageAsset(src)).ConfigureAwait(false);
+                    #pragma warning restore 4014
+                }
+            }
+
+            //Number of pages
+            int pageCount = 0;
+            int.TryParse(docNode.QuerySelectorAll("[class^=lia-js-data-pageNum-]").Last().InnerHtml, out pageCount);
+
+            //Title of topic
+            var title = docNode.QuerySelector(".custom-title").InnerHtml;
+
+            //Logs
+            if (cleanExtras)
+            {
+                Print(textBoxTop, "Topic : " + title);
+                Print(textBoxTop, "Page Count : " + pageCount);
+            }
+
+            Print(textBoxBottom, "Saving page : " + pageNum);
+
+            //Node containing link for the next post-list
+            var next = docNode.QuerySelector(".lia-paging-full-left-position");
+
+            Directory.CreateDirectory(SAVE_LOCATION + SAVE_TOPIC_LOCATION);
+
+            //Post File Name
+            string topicFileName = legalizeFilePath(title + "_" + pageNum) + ".html";
+
+            //Save page document
+            var output = new HtmlAgilityPack.HtmlDocument();
+            output.Load(ASSET_LOCATION + "topic.html");
+            SetTopicPageHeader(output.DocumentNode, pageCount, pageNum, legalizeFilePath(title + "_"));
+            output.DocumentNode.QuerySelector("div.lia-content").AppendChild(messageList);
+            output.Save(SAVE_LOCATION + SAVE_TOPIC_LOCATION + "/" + topicFileName);
+
+            //Return if only one list page
+            if (next == null)
+            {
+                SetFinished();
+                return;
+            }
+            else
+            {
+                next = next.QuerySelector("li.lia-paging-page-next").QuerySelector("a.lia-link-navigation");
+
+                //Return if no list page after this one
+                if (next == null)
+                {
+                    SetFinished();
+                    return;
+                }
+            }
+
+            await Task.Run(() => HandleTopicDocument(next.GetAttributeValue("href", "")));
         }
 
         //Increment the post counter. Should be called when a post task is done.
@@ -492,9 +649,10 @@ namespace LMB_Archivist_Formed
                 using (BinaryReader reader = new BinaryReader(webResponse.GetResponseStream()))
                 {
                     Byte[] lnByte = reader.ReadBytes(1 * 1024 * 1024 * 10);
-                    using (FileStream lxFS = new FileStream("output/" + SAVE_IMAGE_LOCATION + System.IO.Path.GetFileName(url), FileMode.Create))
+                    using (FileStream lxFS = new FileStream("output/" + SAVE_IMAGE_LOCATION + Path.GetFileName(url), FileMode.Create))
                     {
                         lxFS.Write(lnByte, 0, lnByte.Length);
+                        imgCount--;
                     }
                 }
             }
@@ -541,6 +699,48 @@ namespace LMB_Archivist_Formed
             }
 
             return date;
+        }
+
+        //Sets the paging header of a topic page, the one with the numbers and anchors to other pages.
+        private void SetTopicPageHeader(HtmlNode topicNode, int count, int current, string name)
+        {
+            topicNode.QuerySelector("ul.lia-paging-full").Attributes["class"].Value = "lia-paging-full " + "page-count-type-" + Math.Min(count, 5);
+
+            topicNode.QuerySelector("a.page-first").Attributes["href"].Value = name + 1 + ".html";
+            topicNode.QuerySelector("a.page-prev").Attributes["href"].Value = name + (current - 1) + ".html";
+            topicNode.QuerySelector("a.page-next").Attributes["href"].Value = name + (current + 1) + ".html";
+            topicNode.QuerySelector("a.page-last").Attributes["href"].Value = name + count + ".html";
+
+            topicNode.QuerySelector("a.page-first").InnerHtml = "1";
+            topicNode.QuerySelector("a.page-prev").InnerHtml = (current - 1).ToString();
+            topicNode.QuerySelector("a.page-current").InnerHtml = current.ToString();
+            topicNode.QuerySelector("a.page-next").InnerHtml = (current + 1).ToString();
+            topicNode.QuerySelector("a.page-last").InnerHtml = count.ToString();
+
+            topicNode.QuerySelector("a.page-prev-large").Attributes["href"].Value = current <= 1 ? "#" : name + (current - 1) + ".html";
+            topicNode.QuerySelector("a.page-next-large").Attributes["href"].Value = current == count ? "#" : name + (current + 1) + ".html";
+
+            switch (current)
+            {
+                case 1:
+                    topicNode.QuerySelector("li.page-prev").Attributes.Add("style", "display:none;");
+                    topicNode.QuerySelector("li.page-current").Attributes.Add("style", "display:none;");
+                    break;
+                case 2:
+                    topicNode.QuerySelector("li.page-prev").Attributes.Add("style", "display:none;");
+                    break;
+            }
+
+            switch (count - current)
+            {
+                case 1:
+                    topicNode.QuerySelector("li.page-next").Attributes.Add("style", "display:none;");
+                    break;
+                case 0:
+                    topicNode.QuerySelector("li.page-current").Attributes.Add("style", "display:none;");
+                    topicNode.QuerySelector("li.page-next").Attributes.Add("style", "display:none;");
+                    break;
+            }
         }
     }
 }

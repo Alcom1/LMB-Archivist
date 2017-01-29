@@ -26,3 +26,4 @@ C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\Fizz
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\Fizzler.Systems.HtmlAgilityPack.xml
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\HtmlAgilityPack.pdb
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\HtmlAgilityPack.xml
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist Formed\bin\Debug\assets\topic.html

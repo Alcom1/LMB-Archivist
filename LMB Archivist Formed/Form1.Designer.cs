@@ -43,7 +43,7 @@
             this.archive_topic_panel = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBoxUrl = new System.Windows.Forms.TextBox();
             this.archive_post_radio = new System.Windows.Forms.RadioButton();
             this.archive_topic_radio = new System.Windows.Forms.RadioButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -81,7 +81,7 @@
             this.textBoxBottom.Name = "textBoxBottom";
             this.textBoxBottom.ReadOnly = true;
             this.textBoxBottom.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxBottom.Size = new System.Drawing.Size(477, 108);
+            this.textBoxBottom.Size = new System.Drawing.Size(477, 109);
             this.textBoxBottom.TabIndex = 5;
             // 
             // textBoxTop
@@ -199,7 +199,7 @@
             this.archive_topic_panel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.archive_topic_panel.Controls.Add(this.label2);
             this.archive_topic_panel.Controls.Add(this.label3);
-            this.archive_topic_panel.Controls.Add(this.textBox3);
+            this.archive_topic_panel.Controls.Add(this.textBoxUrl);
             this.archive_topic_panel.Enabled = false;
             this.archive_topic_panel.Location = new System.Drawing.Point(12, 138);
             this.archive_topic_panel.Name = "archive_topic_panel";
@@ -232,14 +232,14 @@
             this.label3.TabIndex = 19;
             this.label3.Text = "Topic URL : ";
             // 
-            // textBox3
+            // textBoxUrl
             // 
-            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBoxUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Location = new System.Drawing.Point(84, 4);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(373, 20);
-            this.textBox3.TabIndex = 18;
+            this.textBoxUrl.Location = new System.Drawing.Point(84, 4);
+            this.textBoxUrl.Name = "textBoxUrl";
+            this.textBoxUrl.Size = new System.Drawing.Size(373, 20);
+            this.textBoxUrl.TabIndex = 18;
             // 
             // archive_post_radio
             // 
@@ -344,7 +344,7 @@
         private System.Windows.Forms.RadioButton archive_radio_pages;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox textBoxUrl;
         private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
