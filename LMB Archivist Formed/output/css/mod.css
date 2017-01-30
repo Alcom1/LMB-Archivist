@@ -4,6 +4,11 @@ body {
 
 .lia-content {
     background-color: transparent !important;
+    margin: auto;
+}
+
+.lia-paging-full {
+    margin-top: 10px !important;
 }
 
 .lia-message-actions.lia-component-actions, .lia-message-options {
