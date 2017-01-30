@@ -82,7 +82,11 @@ namespace LMB_Archivist_Formed
                     new FileInfo(pseduoName).Directory.Create();
                     try
                     {
-                        stream.CopyTo(new FileStream(pseduoName, FileMode.CreateNew));
+                        var fileStream = new FileStream(pseduoName, FileMode.CreateNew);
+                        stream.CopyTo(fileStream);
+                        fileStream.Flush();
+                        stream.Close();
+                        fileStream.Close();
                     }
                     catch
                     {
