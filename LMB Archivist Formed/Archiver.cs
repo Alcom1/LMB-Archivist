@@ -63,7 +63,7 @@ namespace LMB_Archivist_Formed
             string completeUrl = MESSAGE_URL + userId + '/';
 
             //Start Task
-            form.Print(TextBoxChoice.TextBoxBottom, "GETTING POST PAGE NUMBER 1");
+            form.Print(TextBoxChoice.TextBoxBottom, "Getting post page number : 1");
             HandlePostListDocument(completeUrl);
         }
 
@@ -86,7 +86,7 @@ namespace LMB_Archivist_Formed
                 imgCount = 0;
 
                 form.SetFinished();
-                form.Print(TextBoxChoice.TextBoxTop, "ARCHIVE TASK COMPLETED");
+                form.Print(TextBoxChoice.TextBoxTop, "Archive Task Completed!");
             }
         }
 
@@ -118,7 +118,7 @@ namespace LMB_Archivist_Formed
                 if (usernameLink == null)
                 {
                     form.ResetButtonToStopped();
-                    form.Print(TextBoxChoice.TextBoxTop, "USER HAS NO POSTS");
+                    form.Print(TextBoxChoice.TextBoxTop, "User has no posts.");
 
                     form.SetFinished();
 
@@ -126,6 +126,7 @@ namespace LMB_Archivist_Formed
                 }
 
                 username = docNode.QuerySelector("a.lia-user-name-link").FirstChild.InnerHtml;
+                form.Print(TextBoxChoice.TextBoxTop, "User name : " + username);
                 Directory.CreateDirectory(SAVE_LOCATION + username + "/");
                 var overview = new HtmlAgilityPack.HtmlDocument();
                 overview.Load(ASSET_LOCATION + "overview.html");
@@ -154,7 +155,7 @@ namespace LMB_Archivist_Formed
             if (next == null)
             {
                 postCount = docNode.QuerySelectorAll("span.lia-message-unread").Count();
-                form.Print(TextBoxChoice.TextBoxTop, "POST COUNT : " + postCount + "");
+                form.Print(TextBoxChoice.TextBoxTop, "Post count : " + postCount + "");
 
                 return;
             }
@@ -167,7 +168,7 @@ namespace LMB_Archivist_Formed
                 {
                     //Calculate final post count based on the final page.
                     postCount += docNode.QuerySelectorAll("span.lia-message-unread").Count() - 20;
-                    form.Print(TextBoxChoice.TextBoxTop, "FINAL POST COUNT : " + postCount);
+                    form.Print(TextBoxChoice.TextBoxTop, "Final post count : " + postCount);
 
                     return;
                 }
@@ -177,7 +178,7 @@ namespace LMB_Archivist_Formed
                 {
                     int.TryParse(docNode.QuerySelectorAll("[class^=lia-js-data-pageNum-]").Last().InnerHtml, out postCount);
                     postCount *= 20;
-                    form.Print(TextBoxChoice.TextBoxTop, "POST ESTIMATE : ~" + postCount);
+                    form.Print(TextBoxChoice.TextBoxTop, "Post count estimate : ~" + postCount);
                 }
             }
 
@@ -190,7 +191,7 @@ namespace LMB_Archivist_Formed
                     int pageNumber = 0;
                     Int32.TryParse(Regex.Match(cssClass, @"\d+$").Value, out pageNumber);
 
-                    form.Print(TextBoxChoice.TextBoxBottom, "GETTING POST PAGE NUMBER " + pageNumber);
+                    form.Print(TextBoxChoice.TextBoxBottom, "Getting post page number : " + pageNumber);
                 }
             }
 
@@ -213,14 +214,14 @@ namespace LMB_Archivist_Formed
 
             var postId = Regex.Match(url, @"m-p\/\d+").Value.Replace("m-p/", "");
 
-            form.Print(TextBoxChoice.TextBoxBottom, "ACQUIRED POST OF ID: " + postId);
+            form.Print(TextBoxChoice.TextBoxBottom, "Acquired post of ID : " + postId);
 
             //Node of post
             var post = docNode.QuerySelector("div.message-uid-" + postId);
 
             if (post == null)
             {
-                form.Print(TextBoxChoice.TextBoxBottom, "POST OF ID: " + postId + " REQUIRES LOGIN. CANNOT GET.");
+                form.Print(TextBoxChoice.TextBoxBottom, "Post of ID : " + postId + " requires login. Cannot get.");
                 incrementPostCounter();
                 return; //Post requires login. Ignore it.
             }
