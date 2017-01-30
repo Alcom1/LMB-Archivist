@@ -11,6 +11,13 @@ using System.Threading.Tasks;
 
 namespace LMB_Archivist_Formed
 {
+    enum TopicReadingState
+    {
+        MustGoToFirst,
+        IsFirst,
+        IsPastFirst
+    }
+
     class Archiver
     {
         private Form1 form;
@@ -70,7 +77,7 @@ namespace LMB_Archivist_Formed
         //Start Topic Archiving
         public void StartTopicArchiving(string url)
         {
-            HandleTopicDocument(url, true);
+            HandleTopicDocument(url, TopicReadingState.MustGoToFirst);
         }
 
         //Check if good to finish archiving, and set finished if so.
@@ -282,28 +289,21 @@ namespace LMB_Archivist_Formed
         }
 
         //Handle topic page.
-        private async void HandleTopicDocument(string url, bool cleanExtras = false)
+        private async void HandleTopicDocument(string url, TopicReadingState state)
         {
             topicDone = false;
 
             int pageNum = 1;
 
             //Logic for cleaning extra fluff in URI and getting a page number
-            var uri = new Uri(url);
-            var segments = uri.Segments;
-            var killSegments = false;       //True when fluff starts in URI
+            var segments = new Uri(url).Segments;
 
             //Walk through URI segments
             for (int i = 0; i < segments.Length; i++)
             {
-                if (segments[i] == "highlight/")
+                if (segments[i] == "page/")
                 {
-                    killSegments = true;
-                }
-                else if (segments[i] == "page/")
-                {
-                    killSegments = true;
-                    if (segments.Length > i && !cleanExtras)
+                    if (segments.Length > i)
                     {
                         if (int.TryParse(segments[i + 1], out pageNum))
                         {
@@ -311,15 +311,7 @@ namespace LMB_Archivist_Formed
                         }
                     }
                 }
-
-                //Kill uneeded segments only if we are cleaning the extra stuff.
-                if (killSegments && cleanExtras)
-                {
-                    segments[i] = "";
-                }
             }
-
-            url = uri.Scheme + "://" + uri.Host + String.Join("", segments);
 
             //Read the document from the request result
             var doc = new HtmlAgilityPack.HtmlDocument();   //Document
@@ -328,6 +320,26 @@ namespace LMB_Archivist_Formed
             webResponse.Close();
 
             var docNode = doc.DocumentNode; //Document Node
+            
+            //Number of pages
+            int pageCount = 0;
+            var pageNumNodes = docNode.QuerySelectorAll("[class^=lia-js-data-pageNum-]");
+            if (pageNumNodes.Count() > 0)
+            {
+                int.TryParse(pageNumNodes.Last().InnerHtml, out pageCount);
+
+                if(state == TopicReadingState.MustGoToFirst)
+                {
+                    await Task.Run(() => HandleTopicDocument(
+                        docNode.QuerySelector("a.lia-js-data-pageNum-1").GetAttributeValue("href", ""),
+                        TopicReadingState.IsFirst));
+                    return;
+                }
+            }
+            else
+            {
+                pageCount = 1;
+            }
 
             var messageList = docNode.QuerySelector(".message-list");
 
@@ -366,23 +378,11 @@ namespace LMB_Archivist_Formed
                 }
             }
 
-            //Number of pages
-            int pageCount = 0;
-            var pageNumNodes = docNode.QuerySelectorAll("[class^=lia-js-data-pageNum-]");
-            if (pageNumNodes.Count() > 0)
-            {
-                int.TryParse(pageNumNodes.Last().InnerHtml, out pageCount);
-            }
-            else
-            {
-                pageCount = 1;
-            }
-
             //Title of topic
             var title = docNode.QuerySelector(".custom-title").InnerHtml;
 
             //Logs
-            if (cleanExtras)
+            if (state == TopicReadingState.IsFirst)
             {
                 form.Print(TextBoxChoice.TextBoxTop, "Topic : " + title);
                 form.Print(TextBoxChoice.TextBoxTop, "Page Count : " + pageCount);
@@ -425,7 +425,9 @@ namespace LMB_Archivist_Formed
                 }
             }
 
-            await Task.Run(() => HandleTopicDocument(next.GetAttributeValue("href", "")));
+            await Task.Run(() => HandleTopicDocument(
+                next.GetAttributeValue("href", ""),
+                TopicReadingState.IsPastFirst));
         }
 
         //Increment the post counter. Should be called when a post task is done.
