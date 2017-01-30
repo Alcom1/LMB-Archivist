@@ -367,7 +367,15 @@ namespace LMB_Archivist_Formed
 
             //Number of pages
             int pageCount = 0;
-            int.TryParse(docNode.QuerySelectorAll("[class^=lia-js-data-pageNum-]").Last().InnerHtml, out pageCount);
+            var pageNumNodes = docNode.QuerySelectorAll("[class^=lia-js-data-pageNum-]");
+            if (pageNumNodes.Count() > 0)
+            {
+                int.TryParse(pageNumNodes.Last().InnerHtml, out pageCount);
+            }
+            else
+            {
+                pageCount = 1;
+            }
 
             //Title of topic
             var title = docNode.QuerySelector(".custom-title").InnerHtml;
