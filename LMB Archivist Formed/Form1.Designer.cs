@@ -309,7 +309,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(525, 475);
             this.Name = "Form1";
-            this.Text = "LEGO Message Boards Archiver";
+            this.Text = "LEGO Message Boards Archivist";
             this.archive_post_panel.ResumeLayout(false);
             this.archive_post_panel.PerformLayout();
             this.archive_topic_panel.ResumeLayout(false);
