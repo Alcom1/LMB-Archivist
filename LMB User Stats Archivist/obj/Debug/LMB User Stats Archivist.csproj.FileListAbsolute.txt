@@ -1,0 +1,16 @@
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\bin\Debug\LMB User Stats Archivist.exe.config
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\bin\Debug\LMB User Stats Archivist.exe
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\bin\Debug\LMB User Stats Archivist.pdb
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\obj\Debug\LMB User Stats Archivist.csprojResolveAssemblyReference.cache
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\obj\Debug\LMB_User_Stats_Archivist.Form1.resources
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\obj\Debug\LMB_User_Stats_Archivist.Properties.Resources.resources
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\obj\Debug\LMB User Stats Archivist.csproj.GenerateResource.Cache
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\obj\Debug\LMB User Stats Archivist.exe
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\obj\Debug\LMB User Stats Archivist.pdb
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\bin\Debug\Fizzler.dll
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\bin\Debug\Fizzler.Systems.HtmlAgilityPack.dll
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\bin\Debug\HtmlAgilityPack.dll
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\bin\Debug\Fizzler.xml
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\bin\Debug\Fizzler.Systems.HtmlAgilityPack.xml
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB User Stats Archivist\bin\Debug\HtmlAgilityPack.xml
