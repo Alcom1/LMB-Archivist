@@ -153,6 +153,12 @@ namespace LMB_Archivist_Formed
                     Task.Run(() => HandlePostDocument(BASE_URL + itemAnchor.GetAttributeValue("href", ""))).ConfigureAwait(false);
                     #pragma warning restore 4014
                 }
+                else
+                {
+                    //Some posts might have no anchor and have thus been deleted. Ignore.
+                    form.Print(TextBoxChoice.TextBoxBottom, "Deleted post discovered. Ignoring.");
+                    postCount--;
+                }
             }
 
             //Node containing link for the next post-list
@@ -330,10 +336,18 @@ namespace LMB_Archivist_Formed
 
                 if(state == TopicReadingState.MustGoToFirst)
                 {
-                    await Task.Run(() => HandleTopicDocument(
-                        docNode.QuerySelector("a.lia-js-data-pageNum-1").GetAttributeValue("href", ""),
-                        TopicReadingState.IsFirst));
-                    return;
+                    if (docNode.QuerySelector("span.lia-js-data-pageNum-1") != null)
+                    {
+                        //This is the first page.
+                        state = TopicReadingState.IsFirst;
+                    }
+                    else
+                    {
+                        await Task.Run(() => HandleTopicDocument(
+                            docNode.QuerySelector("a.lia-js-data-pageNum-1").GetAttributeValue("href", ""),
+                            TopicReadingState.IsFirst));
+                        return;
+                    }
                 }
             }
             else
