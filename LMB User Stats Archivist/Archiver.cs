@@ -13,23 +13,38 @@ namespace LMB_User_Stats_Archivist
 {
     class Archiver
     {
+        private const string BASE_URL = "https://community.lego.com/";
+
         private const string PROFILEs_URL = "https://community.lego.com/t5/user/viewprofilepage/user-id/";
 
+        private const string ASSET_LOCATION = "assets/";
+
+        private const string SAVE_IMAGE_LOCATION = "/images/";
+
         private string saveLocation;
+
+        private string saveSubLocation;
 
         private int start;
 
         private int end;
 
         private Form1 form;                                     //Form
-        
+
         private TaskFactory taskFactory = new TaskFactory();    //Task Factory
+
+        private Object lockerImage = new Object();
 
         public Archiver(Form1 form, string saveLocation, int start, int end)
         {
+            this.form = form;
+            this.saveLocation = saveLocation;
             this.start = start;
             this.end = end;
-            this.form = form;
+
+            saveSubLocation = "/Users " + start + " to " + end + "/";
+            Directory.CreateDirectory(saveLocation + saveSubLocation);
+            Directory.CreateDirectory(saveLocation + SAVE_IMAGE_LOCATION);
         }
 
         //TAP Asynchronous Web Request for LMB Document
@@ -42,20 +57,96 @@ namespace LMB_User_Stats_Archivist
             return await task;
         }
 
-        private void tossRequests()
+        public void tossRequests()
         {
-            for(int i = start; i <= end; i++)
+            for (int i = start; i <= end; i++)
             {
+                var copyId = i;
                 #pragma warning disable 4014
-                Task.Run(() => userRequest(i)).ConfigureAwait(false);
+                Task.Run(() => UserRequest(copyId)).ConfigureAwait(false);
                 #pragma warning restore 4014
             }
         }
 
-        private async void userRequest(int id)
+        private async void UserRequest(int id)
         {
             var webResponse = await GetRequestStreamAsync(PROFILEs_URL + id);
             var doc = new HtmlAgilityPack.HtmlDocument();
+            doc.Load(webResponse.GetResponseStream());
+            webResponse.Close();
+
+            var docNode = doc.DocumentNode; //Document Node
+
+            if (docNode.QuerySelector(".lia-text error-description") != null)
+            {
+                return;
+            }
+            
+            var images = docNode.QuerySelectorAll("img");
+
+            //Get images and set the src for them, but not in that order.
+            foreach (HtmlNode image in images)
+            {
+                var src = image.GetAttributeValue("src", "");
+
+                string imageFileLocation = SAVE_IMAGE_LOCATION + Path.GetFileName(src);
+
+                image.SetAttributeValue("src", "../" + imageFileLocation);
+
+                if (!File.Exists(saveLocation + imageFileLocation))
+                {
+                    #pragma warning disable 4014
+                    Task.Run(() => HandleImageAsset(src)).ConfigureAwait(false);
+                    #pragma warning restore 4014
+                }
+            }
+
+            var output = new HtmlAgilityPack.HtmlDocument();
+            output.Load(ASSET_LOCATION + "default.html");
+            AppendToNode(output.DocumentNode, docNode, ".container", "div.custom-profile");
+            AppendToNode(output.DocumentNode, docNode, ".container", "h3.role-badges-header");
+            AppendToNode(output.DocumentNode, docNode, ".container", "div.role-badges");
+            output.Save(saveLocation + saveSubLocation + id + ".html");
+
+            form.Print("User ID " + id + " saved!");
+        }
+
+        private void AppendToNode(HtmlNode target, HtmlNode apendee, string destinationSelector, string segmentSelector)
+        {
+            if(apendee.QuerySelector(segmentSelector) != null)
+                target.QuerySelector(destinationSelector).AppendChild(apendee.QuerySelector(segmentSelector));
+        }
+
+        private async void HandleImageAsset(string url)
+        {
+            //Compatibility for older LMB emotes that still hang around for SOME reason.
+            if (url.StartsWith("/html/"))
+            {
+                url = BASE_URL + url;
+            }
+            try
+            {
+                var webResponse = await GetRequestStreamAsync(url);
+
+                //Prevent interuption when writing post image
+                lock (lockerImage)
+                {
+                    //I don't know, I just copied this off Stack Overflow and it works.
+                    using (BinaryReader reader = new BinaryReader(webResponse.GetResponseStream()))
+                    {
+                        Byte[] lnByte = reader.ReadBytes(1 * 1024 * 1024 * 10);
+                        using (FileStream lxFS = new FileStream(saveLocation + SAVE_IMAGE_LOCATION + Path.GetFileName(url), FileMode.Create))
+                        {
+                            lxFS.Write(lnByte, 0, lnByte.Length);
+                            form.Print("Saving Image : " + Path.GetFileName(url));
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                form.Print("Failed to save Image : " + Path.GetFileName(url));
+            }
         }
     }
 }

@@ -39,7 +39,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.textBoxTop = new System.Windows.Forms.TextBox();
+            this.textBox = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.archive_post_panel.SuspendLayout();
@@ -52,7 +52,6 @@
             // button_archive
             // 
             this.button_archive.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.button_archive.Enabled = false;
             this.button_archive.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_archive.Location = new System.Drawing.Point(130, 84);
             this.button_archive.Name = "button_archive";
@@ -99,6 +98,11 @@
             // numStart
             // 
             this.numStart.Location = new System.Drawing.Point(93, 5);
+            this.numStart.Maximum = new decimal(new int[] {
+            3000000,
+            0,
+            0,
+            0});
             this.numStart.Name = "numStart";
             this.numStart.Size = new System.Drawing.Size(90, 20);
             this.numStart.TabIndex = 19;
@@ -157,19 +161,19 @@
             this.toolTip1.ReshowDelay = 10;
             this.toolTip1.ShowAlways = true;
             // 
-            // textBoxTop
+            // textBox
             // 
-            this.textBoxTop.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBoxTop.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTop.Location = new System.Drawing.Point(3, 3);
-            this.textBoxTop.Multiline = true;
-            this.textBoxTop.Name = "textBoxTop";
-            this.textBoxTop.ReadOnly = true;
-            this.textBoxTop.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxTop.Size = new System.Drawing.Size(479, 222);
-            this.textBoxTop.TabIndex = 8;
+            this.textBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox.Location = new System.Drawing.Point(3, 3);
+            this.textBox.Multiline = true;
+            this.textBox.Name = "textBox";
+            this.textBox.ReadOnly = true;
+            this.textBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBox.Size = new System.Drawing.Size(479, 222);
+            this.textBox.TabIndex = 8;
             // 
             // panel1
             // 
@@ -188,7 +192,7 @@
             // panel2
             // 
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.textBoxTop);
+            this.panel2.Controls.Add(this.textBox);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Enabled = false;
             this.panel2.Location = new System.Drawing.Point(11, 0);
@@ -225,7 +229,7 @@
         internal System.Windows.Forms.Panel archive_post_panel;
         internal System.Windows.Forms.Label label1;
         internal System.Windows.Forms.ToolTip toolTip1;
-        internal System.Windows.Forms.TextBox textBoxTop;
+        internal System.Windows.Forms.TextBox textBox;
         internal System.Windows.Forms.Panel panel1;
         internal System.Windows.Forms.Panel panel2;
         internal System.Windows.Forms.Label label2;
