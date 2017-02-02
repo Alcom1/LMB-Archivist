@@ -108,6 +108,8 @@ namespace LMB_User_Stats_Archivist
             {
                 var images = docNode.QuerySelectorAll("img");
 
+                var username = docNode.QuerySelector(".UserName").QuerySelector("span").InnerHtml;
+
                 //Get images and set the src for them, but not in that order.
                 foreach (HtmlNode image in images)
                 {
@@ -130,7 +132,7 @@ namespace LMB_User_Stats_Archivist
                 AppendToNode(output.DocumentNode, docNode, ".container", "div.custom-profile");
                 AppendToNode(output.DocumentNode, docNode, ".container", "h3.role-badges-header");
                 AppendToNode(output.DocumentNode, docNode, ".container", "div.role-badges");
-                output.Save(saveLocation + saveSubLocation + id + ".html");
+                output.Save(saveLocation + saveSubLocation + id + "_" + username + ".html");
 
                 form.Print("User ID " + id + " saved!");
             }
