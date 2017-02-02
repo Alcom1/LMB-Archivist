@@ -5,9 +5,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace LMB_User_Stats_Archivist
 {
@@ -21,11 +23,19 @@ namespace LMB_User_Stats_Archivist
 
         private const string SAVE_IMAGE_LOCATION = "/images/";
 
+        private const int simuLimit = 20;
+
+        private int finalSimuLimit;
+
         private string saveLocation;
 
         private string saveSubLocation;
 
         private int start;
+
+        private int counter;
+
+        private int counterFinished;
 
         private int end;
 
@@ -40,11 +50,24 @@ namespace LMB_User_Stats_Archivist
             this.form = form;
             this.saveLocation = saveLocation;
             this.start = start;
+            this.counter = start;
+            this.counterFinished = start;
             this.end = end;
+
+            if(this.end - this.start < simuLimit)
+            {
+                finalSimuLimit = this.end - this.start;
+            }
+            else
+            {
+                finalSimuLimit = simuLimit;
+            }
 
             saveSubLocation = "/Users " + start + " to " + end + "/";
             Directory.CreateDirectory(saveLocation + saveSubLocation);
             Directory.CreateDirectory(saveLocation + SAVE_IMAGE_LOCATION);
+
+            form.ExtractEmbeddedResources(saveLocation);
         }
 
         //TAP Asynchronous Web Request for LMB Document
@@ -59,13 +82,17 @@ namespace LMB_User_Stats_Archivist
 
         public void tossRequests()
         {
-            for (int i = start; i <= end; i++)
+            form.Print("Starting task!");
+
+            for (; counter <= start + finalSimuLimit; counter++)
             {
-                var copyId = i;
+                var copyId = counter;
                 #pragma warning disable 4014
                 Task.Run(() => UserRequest(copyId)).ConfigureAwait(false);
                 #pragma warning restore 4014
             }
+
+            counter--;
         }
 
         private async void UserRequest(int id)
@@ -77,38 +104,56 @@ namespace LMB_User_Stats_Archivist
 
             var docNode = doc.DocumentNode; //Document Node
 
-            if (docNode.QuerySelector(".lia-text error-description") != null)
+            if (docNode.QuerySelector(".lia-text error-description") == null)
             {
-                return;
-            }
-            
-            var images = docNode.QuerySelectorAll("img");
+                var images = docNode.QuerySelectorAll("img");
 
-            //Get images and set the src for them, but not in that order.
-            foreach (HtmlNode image in images)
-            {
-                var src = image.GetAttributeValue("src", "");
-
-                string imageFileLocation = SAVE_IMAGE_LOCATION + Path.GetFileName(src);
-
-                image.SetAttributeValue("src", "../" + imageFileLocation);
-
-                if (!File.Exists(saveLocation + imageFileLocation))
+                //Get images and set the src for them, but not in that order.
+                foreach (HtmlNode image in images)
                 {
-                    #pragma warning disable 4014
-                    Task.Run(() => HandleImageAsset(src)).ConfigureAwait(false);
-                    #pragma warning restore 4014
+                    var src = image.GetAttributeValue("src", "");
+
+                    string imageFileLocation = SAVE_IMAGE_LOCATION + Path.GetFileName(src);
+
+                    image.SetAttributeValue("src", "../" + imageFileLocation);
+
+                    if (!File.Exists(saveLocation + imageFileLocation))
+                    {
+                        #pragma warning disable 4014
+                        Task.Run(() => HandleImageAsset(src)).ConfigureAwait(false);
+                        #pragma warning restore 4014
+                    }
                 }
+
+                var output = new HtmlAgilityPack.HtmlDocument();
+                output.Load(Assembly.GetExecutingAssembly().GetManifestResourceStream("LMB_User_Stats_Archivist.assets.default.html"));
+                AppendToNode(output.DocumentNode, docNode, ".container", "div.custom-profile");
+                AppendToNode(output.DocumentNode, docNode, ".container", "h3.role-badges-header");
+                AppendToNode(output.DocumentNode, docNode, ".container", "div.role-badges");
+                output.Save(saveLocation + saveSubLocation + id + ".html");
+
+                form.Print("User ID " + id + " saved!");
+            }
+            else
+            {
+                form.Print("User ID " + id + " does not exist!");
             }
 
-            var output = new HtmlAgilityPack.HtmlDocument();
-            output.Load(ASSET_LOCATION + "default.html");
-            AppendToNode(output.DocumentNode, docNode, ".container", "div.custom-profile");
-            AppendToNode(output.DocumentNode, docNode, ".container", "h3.role-badges-header");
-            AppendToNode(output.DocumentNode, docNode, ".container", "div.role-badges");
-            output.Save(saveLocation + saveSubLocation + id + ".html");
+            counterFinished++;
+            counter++;
 
-            form.Print("User ID " + id + " saved!");
+            if (counter <= end)
+            {
+                #pragma warning disable 4014
+                Task.Run(() => UserRequest(counter)).ConfigureAwait(false);
+                #pragma warning restore 4014
+            }
+
+            if (counterFinished > end)
+            {
+                form.Print("Task complete!");
+                form.Enable();
+            }
         }
 
         private void AppendToNode(HtmlNode target, HtmlNode apendee, string destinationSelector, string segmentSelector)

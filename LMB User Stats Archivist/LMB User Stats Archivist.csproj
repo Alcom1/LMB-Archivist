@@ -50,6 +50,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -98,6 +99,16 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assets\default.html" />
+    <EmbeddedResource Include="css\avatar-author-bg.png" />
+    <EmbeddedResource Include="css\blob.css" />
+    <EmbeddedResource Include="css\blue-button-bg.png" />
+    <EmbeddedResource Include="css\body-bg.png" />
+    <EmbeddedResource Include="css\browse-forum-bg.png" />
+    <EmbeddedResource Include="css\like.png" />
+    <EmbeddedResource Include="css\main.css" />
+    <EmbeddedResource Include="css\mod.css" />
+    <EmbeddedResource Include="css\overview.css" />
+    <EmbeddedResource Include="css\speech-triangle-left.png" />
     <Content Include="smile.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

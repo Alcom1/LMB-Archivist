@@ -1,0 +1,33 @@
+* {
+    font-family: Arial;
+}
+
+h1 {
+    font-size: 24px;
+    font-family: verdana, arial, helvetica;
+    font-weight: bold;
+    color: #d25a1b;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: #f9f2c0;
+    margin: 6px;
+    padding: 6px;
+    border-radius: 4px;
+}
+
+a {
+    color: #8d0007 !important;
+    font-weight: normal;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+a:hover, a:active {
+    text-decoration: underline;
+}
