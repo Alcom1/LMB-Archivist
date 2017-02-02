@@ -132,7 +132,7 @@ namespace LMB_User_Stats_Archivist
                 AppendToNode(output.DocumentNode, docNode, ".container", "div.custom-profile");
                 AppendToNode(output.DocumentNode, docNode, ".container", "h3.role-badges-header");
                 AppendToNode(output.DocumentNode, docNode, ".container", "div.role-badges");
-                output.Save(saveLocation + saveSubLocation + id + "_" + username + ".html");
+                output.Save(saveLocation + saveSubLocation + legalizeFilePath(id + "_" + username) + ".html");
 
                 form.Print("User ID " + id + " saved!");
             }
@@ -162,6 +162,14 @@ namespace LMB_User_Stats_Archivist
         {
             if(apendee.QuerySelector(segmentSelector) != null)
                 target.QuerySelector(destinationSelector).AppendChild(apendee.QuerySelector(segmentSelector));
+        }
+
+        //Replace illegal characters in given file path
+        private string legalizeFilePath(string filePath)
+        {
+            string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+            Regex r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+            return r.Replace(filePath, "");
         }
 
         private async void HandleImageAsset(string url)
