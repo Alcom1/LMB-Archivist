@@ -8,6 +8,7 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -97,10 +98,22 @@ namespace LMB_User_Stats_Archivist
 
         private async void UserRequest(int id)
         {
-            var webResponse = await GetRequestStreamAsync(PROFILEs_URL + id);
             var doc = new HtmlAgilityPack.HtmlDocument();
-            doc.Load(webResponse.GetResponseStream());
-            webResponse.Close();
+            try
+            {
+                var webResponse = await GetRequestStreamAsync(PROFILEs_URL + id);
+                doc.Load(webResponse.GetResponseStream());
+                webResponse.Close();
+            }
+            catch
+            {
+                form.Print("Failed to get page for user : " + id + "; Retrying.");
+                Thread.Sleep(5000);
+                #pragma warning disable 4014
+                Task.Run(() => UserRequest(id)).ConfigureAwait(false);
+                #pragma warning restore 4014
+                return;
+            }
 
             var docNode = doc.DocumentNode; //Document Node
 
