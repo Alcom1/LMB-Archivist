@@ -1,4 +1,6 @@
-﻿namespace LMB_Archivist_Formed
+﻿using System.Windows.Forms;
+
+namespace LMB_Archivist_Formed
 {
     partial class Form1
     {
@@ -48,6 +50,7 @@
             this.archive_topic_radio = new System.Windows.Forms.RadioButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button_add = new System.Windows.Forms.Button();
             this.archive_post_panel.SuspendLayout();
             this.archive_topic_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -58,12 +61,12 @@
             // 
             // button_archive
             // 
-            this.button_archive.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.button_archive.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button_archive.Enabled = false;
             this.button_archive.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_archive.Location = new System.Drawing.Point(130, 163);
+            this.button_archive.Location = new System.Drawing.Point(259, 161);
             this.button_archive.Name = "button_archive";
-            this.button_archive.Size = new System.Drawing.Size(243, 48);
+            this.button_archive.Size = new System.Drawing.Size(187, 48);
             this.button_archive.TabIndex = 0;
             this.button_archive.Text = "START ARCHIVE!";
             this.button_archive.UseVisualStyleBackColor = true;
@@ -295,11 +298,25 @@
             this.splitContainer1.SplitterWidth = 9;
             this.splitContainer1.TabIndex = 15;
             // 
+            // button_add
+            // 
+            this.button_add.Enabled = false;
+            this.button_add.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_add.Location = new System.Drawing.Point(66, 161);
+            this.button_add.Name = "button_add";
+            this.button_add.Size = new System.Drawing.Size(187, 48);
+            this.button_add.TabIndex = 16;
+            this.button_add.Text = "ADD TASK";
+            this.button_add.UseVisualStyleBackColor = true;
+            this.button_add.Click += new System.EventHandler(this.button_add_Click);
+            // 
             // Form1
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(509, 512);
+            this.Controls.Add(this.button_add);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.archive_topic_radio);
             this.Controls.Add(this.archive_post_radio);
@@ -310,6 +327,8 @@
             this.MinimumSize = new System.Drawing.Size(525, 475);
             this.Name = "Form1";
             this.Text = "LEGO Message Boards Archivist";
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form1_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form1_DragEnter);
             this.archive_post_panel.ResumeLayout(false);
             this.archive_post_panel.PerformLayout();
             this.archive_topic_panel.ResumeLayout(false);
@@ -344,6 +363,7 @@
         internal System.Windows.Forms.Label label3;
         internal System.Windows.Forms.TextBox textBoxUrl;
         internal System.Windows.Forms.SplitContainer splitContainer1;
+        internal Button button_add;
     }
 }
 

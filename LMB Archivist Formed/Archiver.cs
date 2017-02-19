@@ -20,7 +20,11 @@ namespace LMB_Archivist_Formed
 
     class Archiver
     {
+        //
         private Form1 form;
+
+        //
+        private TaskManager manager;
 
         //Base LMB URL
         private const string BASE_URL = "https://community.lego.com/";
@@ -57,9 +61,10 @@ namespace LMB_Archivist_Formed
         private bool topicDone = true;
 
         //Constructor
-        public Archiver(Form1 form)
+        public Archiver(TaskManager manager, Form1 form)
         {
             this.form = form;
+            this.manager = manager;
 
             Directory.CreateDirectory(SAVE_LOCATION + SAVE_IMAGE_LOCATION);
         }
@@ -92,8 +97,7 @@ namespace LMB_Archivist_Formed
                 postCounter = 0;
                 imgCount = 0;
 
-                form.SetFinished();
-                form.Print(TextBoxChoice.TextBoxTop, "Archive Task Completed!");
+                manager.SetFinished();
             }
         }
 
@@ -124,10 +128,9 @@ namespace LMB_Archivist_Formed
 
                 if (usernameLink == null)
                 {
-                    form.ResetButtonToStopped();
                     form.Print(TextBoxChoice.TextBoxTop, "User has no posts.");
 
-                    form.SetFinished();
+                    manager.SetFinished();
 
                     return;
                 }
