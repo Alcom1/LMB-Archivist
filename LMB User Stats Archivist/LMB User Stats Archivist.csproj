@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A79E4F3A-771B-4C48-BDF4-02C21638985E}</ProjectGuid>
+    <ProjectGuid>{D30031AF-EB75-4C94-937B-B9E4E3A91B16}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LMB_Archivist_Formed</RootNamespace>
-    <AssemblyName>LMB Archivist Formed</AssemblyName>
+    <RootNamespace>LMB_User_Stats_Archivist</RootNamespace>
+    <AssemblyName>LMB User Stats Archivist</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -50,6 +50,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,17 +62,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Archiver.cs" />
+    <Compile Include="Form1.cs" />
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Archiver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ArchiveTask.cs" />
-    <Compile Include="TaskManager.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -100,18 +97,16 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assets\default.html" />
-    <EmbeddedResource Include="assets\overview.html" />
-    <EmbeddedResource Include="output\css\avatar-author-bg.png" />
-    <EmbeddedResource Include="output\css\blob.css" />
-    <EmbeddedResource Include="output\css\blue-button-bg.png" />
-    <EmbeddedResource Include="output\css\body-bg.png" />
-    <EmbeddedResource Include="output\css\browse-forum-bg.png" />
-    <EmbeddedResource Include="output\css\like.png" />
-    <EmbeddedResource Include="output\css\main.css" />
-    <EmbeddedResource Include="output\css\mod.css" />
-    <EmbeddedResource Include="output\css\overview.css" />
-    <EmbeddedResource Include="output\css\speech-triangle-left.png" />
-    <EmbeddedResource Include="assets\topic.html" />
+    <EmbeddedResource Include="css\avatar-author-bg.png" />
+    <EmbeddedResource Include="css\blob.css" />
+    <EmbeddedResource Include="css\blue-button-bg.png" />
+    <EmbeddedResource Include="css\body-bg.png" />
+    <EmbeddedResource Include="css\browse-forum-bg.png" />
+    <EmbeddedResource Include="css\like.png" />
+    <EmbeddedResource Include="css\main.css" />
+    <EmbeddedResource Include="css\mod.css" />
+    <EmbeddedResource Include="css\overview.css" />
+    <EmbeddedResource Include="css\speech-triangle-left.png" />
     <Content Include="smile.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

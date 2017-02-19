@@ -47,7 +47,7 @@ namespace LMB_Archivist_Formed
         private ArchiveOptionState optionState;
 
         //Archiver
-        Archiver archiver;
+        TaskManager manager;
 
         //
         public Form1()
@@ -56,7 +56,7 @@ namespace LMB_Archivist_Formed
 
             ExtractEmbeddedResources();
 
-            archiver = new Archiver(this);
+            manager = new TaskManager(this);
 
             buttonState = ArchiveButtonState.Stopped;
         }
@@ -82,7 +82,11 @@ namespace LMB_Archivist_Formed
                     new FileInfo(pseduoName).Directory.Create();
                     try
                     {
-                        stream.CopyTo(new FileStream(pseduoName, FileMode.CreateNew));
+                        var fileStream = new FileStream(pseduoName, FileMode.CreateNew);
+                        stream.CopyTo(fileStream);
+                        fileStream.Flush();
+                        stream.Close();
+                        fileStream.Close();
                     }
                     catch
                     {
@@ -90,6 +94,18 @@ namespace LMB_Archivist_Formed
                     }
                 }
             }
+        }
+
+        //
+        void Form1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop)) e.Effect = DragDropEffects.Copy;
+        }
+
+        //
+        void Form1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
         }
 
         //
@@ -138,154 +154,102 @@ namespace LMB_Archivist_Formed
         {
             this.archive_post_panel.Enabled = this.archive_post_radio.Checked;
             this.archive_topic_panel.Enabled = this.archive_topic_radio.Checked;
-
-            this.button_archive.Enabled = true;
+            this.button_add.Enabled = true;
         }
         
-        //Start button
-        private void button_archive_Click(object sender, EventArgs e)
+        //Add Task button
+        private void button_add_Click(object sender, EventArgs e)
         {
-            switch(buttonState)
+            switch (optionState)
             {
-                case ArchiveButtonState.Stopped:
-                    textBoxTop.Text = "";
-                    textBoxBottom.Text = "";
-                    switch(optionState)
+                case ArchiveOptionState.SaveUserPosts:
+                    if (Regex.IsMatch(textBoxUserId.Text, @"^\d+$"))
                     {
-                        case ArchiveOptionState.SaveUserPosts:
-                            int userId;
-
-                            if (int.TryParse(textBoxUserId.Text, out userId))
-                            {
-                                archiver.StartUserPostArchiving(userId);
-
-                                buttonState = ArchiveButtonState.Running;
-                                button_archive.Text = "ARCHIVING!";
-
-                                //Disable everything
-                                this.archive_post_panel.Enabled = false;
-                                this.archive_topic_panel.Enabled = false;
-                                this.archive_post_radio.Enabled = false;
-                                this.archive_topic_radio.Enabled = false;
-                            }
-                            else
-                            {
-                                this.Print(TextBoxChoice.TextBoxTop, "INVALID USER ID: " + textBoxUserId.Text);
-                            }
-                            break;
-
-                        case ArchiveOptionState.SaveUserPages:
-                            this.Print(TextBoxChoice.TextBoxTop, "UNIMPLEMENTED FEATURE : ARCHIVE USER PAGES");
-                            break;
-
-                        case ArchiveOptionState.SaveUserTopics:
-                            this.Print(TextBoxChoice.TextBoxTop, "UNIMPLEMENTED FEATURE : ARCHIVE USER TOPICS");
-                            break;
-
-                        case ArchiveOptionState.SaveTopics:
-
-                            string url = textBoxUrl.Text;
-                            if(url.StartsWith("community.lego.com/t5/"))
-                            {
-                                url = "https://" + url;
-                            }
-                            if (url.StartsWith("https://community.lego.com/t5/"))
-                            {
-                                archiver.StartTopicArchiving(url);
-
-                                buttonState = ArchiveButtonState.Running;
-                                button_archive.Text = "ARCHIVING!";
-
-                                //Disable everything
-                                this.archive_post_panel.Enabled = false;
-                                this.archive_topic_panel.Enabled = false;
-                                this.archive_post_radio.Enabled = false;
-                                this.archive_topic_radio.Enabled = false;
-                            }
-                            else
-                            {
-                                this.Print(TextBoxChoice.TextBoxTop, "INVALID URL: " + url);
-                            }
-                            break;
+                        this.NewLine(TextBoxChoice.TextBoxTop);
+                        this.Print(TextBoxChoice.TextBoxTop, "TASK ADDED : Archive User ID : " + textBoxUserId.Text);
+                        manager.AddTask(optionState, textBoxUserId.Text);
+                        this.button_archive.Enabled = true;
+                    }
+                    else
+                    {
+                        this.Print(TextBoxChoice.TextBoxTop, "Invalid User ID for task: " + textBoxUserId.Text);
                     }
                     break;
 
-                case ArchiveButtonState.Running:
-                    buttonState = ArchiveButtonState.AreSure;
-                    button_archive.Text = "Cancel and Quit?";
-                    Task.Delay(3000).ContinueWith(t => ResetButtonToRunning());
+                case ArchiveOptionState.SaveUserPages:
+                    this.Print(TextBoxChoice.TextBoxTop, "UNIMPLEMENTED FEATURE : ARCHIVE USER PAGES");
                     break;
 
-                case ArchiveButtonState.AreSure:
-                    Application.Exit();
+                case ArchiveOptionState.SaveUserTopics:
+                    this.Print(TextBoxChoice.TextBoxTop, "UNIMPLEMENTED FEATURE : ARCHIVE USER TOPICS");
+                    break;
+
+                case ArchiveOptionState.SaveTopics:
+
+                    string url = textBoxUrl.Text;
+                    if (url.StartsWith("community.lego.com/t5/"))
+                    {
+                        url = "https://" + url;
+                    }
+                    if (url.StartsWith("https://community.lego.com/t5/"))
+                    {
+                        this.NewLine(TextBoxChoice.TextBoxTop);
+                        this.Print(TextBoxChoice.TextBoxTop, "TASK ADDED : Archive Topic : " + url);
+                        manager.AddTask(optionState, url);
+                        this.button_archive.Enabled = true;
+                    }
+                    else
+                    {
+                        this.Print(TextBoxChoice.TextBoxTop, "INVALID URL: " + url);
+                    }
                     break;
             }
         }
 
-        //Return button from an "Are you sure" state to a running state.
-        public void ResetButtonToRunning()
+        //Start button
+        private void button_archive_Click(object sender, EventArgs e)
         {
-            if(buttonState == ArchiveButtonState.AreSure)
-            {
-                //Thread safety
-                if (this.InvokeRequired)
-                {
-                    Invoke(new MethodInvoker(delegate () {
-                        ResetButtonToRunning();
-                    }));
-                }
-                else
-                {
-                    buttonState = ArchiveButtonState.Running;
-                    button_archive.Text = "ARCHIVING!";
-                }
-            }
+            this.button_archive.Enabled = false;
+            manager.Start();
         }
 
-        //Return button to a stopped state
-        public void ResetButtonToStopped()
+        //Enable the start button
+        public void EnableStartButton()
         {
             //Thread safety
             if (this.InvokeRequired)
             {
                 Invoke(new MethodInvoker(delegate () {
-                    ResetButtonToStopped();
+                    EnableStartButton();
                 }));
             }
             else
             {
-                buttonState = ArchiveButtonState.Stopped;
-                button_archive.Text = "START ARCHIVE!";
+                this.button_archive.Enabled = true;
             }
         }
 
-        //Set finished state for when finished
-        public void SetFinished()
+        //Create a new link in a text box
+        public void NewLine(TextBoxChoice choice)
         {
-            //Thread safety
-            if (this.InvokeRequired)
+            switch(choice)
             {
-                Invoke(new MethodInvoker(delegate () {
-                    SetFinished();
-                }));
-            }
-            else
-            {
-                buttonState = ArchiveButtonState.Stopped;
-                button_archive.Text = "START ARCHIVE!";
-                this.archive_post_radio.Enabled = true;
-                this.archive_topic_radio.Enabled = true;
-                this.archive_post_panel.Enabled = this.archive_post_radio.Checked;
-                this.archive_topic_panel.Enabled = this.archive_topic_radio.Checked;
+                case TextBoxChoice.TextBoxTop:
+                    if(!String.IsNullOrEmpty(this.textBoxTop.Text))
+                    {
+                        Print(choice, "");
+                    }
+                    break;
+                case TextBoxChoice.TextBoxBottom:
+                    if (!String.IsNullOrEmpty(this.textBoxBottom.Text))
+                    {
+                        Print(choice, "");
+                    }
+                    break;
             }
         }
 
         //Print text in a provided text box.
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="choice"></param>
-        /// <param name="message"></param>
         public void Print(TextBoxChoice choice, string message)
         {
             //Thread safety

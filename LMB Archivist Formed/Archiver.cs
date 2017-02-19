@@ -11,9 +11,20 @@ using System.Threading.Tasks;
 
 namespace LMB_Archivist_Formed
 {
+    enum TopicReadingState
+    {
+        MustGoToFirst,
+        IsFirst,
+        IsPastFirst
+    }
+
     class Archiver
     {
+        //
         private Form1 form;
+
+        //
+        private TaskManager manager;
 
         //Base LMB URL
         private const string BASE_URL = "https://community.lego.com/";
@@ -50,9 +61,10 @@ namespace LMB_Archivist_Formed
         private bool topicDone = true;
 
         //Constructor
-        public Archiver(Form1 form)
+        public Archiver(TaskManager manager, Form1 form)
         {
             this.form = form;
+            this.manager = manager;
 
             Directory.CreateDirectory(SAVE_LOCATION + SAVE_IMAGE_LOCATION);
         }
@@ -63,14 +75,14 @@ namespace LMB_Archivist_Formed
             string completeUrl = MESSAGE_URL + userId + '/';
 
             //Start Task
-            form.Print(TextBoxChoice.TextBoxBottom, "GETTING POST PAGE NUMBER 1");
+            form.Print(TextBoxChoice.TextBoxBottom, "Getting post page number : 1");
             HandlePostListDocument(completeUrl);
         }
 
         //Start Topic Archiving
         public void StartTopicArchiving(string url)
         {
-            HandleTopicDocument(url, true);
+            HandleTopicDocument(url, TopicReadingState.MustGoToFirst);
         }
 
         //Check if good to finish archiving, and set finished if so.
@@ -85,8 +97,7 @@ namespace LMB_Archivist_Formed
                 postCounter = 0;
                 imgCount = 0;
 
-                form.SetFinished();
-                form.Print(TextBoxChoice.TextBoxTop, "ARCHIVE TASK COMPLETED");
+                manager.SetFinished();
             }
         }
 
@@ -117,15 +128,15 @@ namespace LMB_Archivist_Formed
 
                 if (usernameLink == null)
                 {
-                    form.ResetButtonToStopped();
-                    form.Print(TextBoxChoice.TextBoxTop, "USER HAS NO POSTS");
+                    form.Print(TextBoxChoice.TextBoxTop, "User has no posts.");
 
-                    form.SetFinished();
+                    manager.SetFinished();
 
                     return;
                 }
 
                 username = docNode.QuerySelector("a.lia-user-name-link").FirstChild.InnerHtml;
+                form.Print(TextBoxChoice.TextBoxTop, "User name : " + username);
                 Directory.CreateDirectory(SAVE_LOCATION + username + "/");
                 var overview = new HtmlAgilityPack.HtmlDocument();
                 overview.Load(ASSET_LOCATION + "overview.html");
@@ -145,6 +156,12 @@ namespace LMB_Archivist_Formed
                     Task.Run(() => HandlePostDocument(BASE_URL + itemAnchor.GetAttributeValue("href", ""))).ConfigureAwait(false);
                     #pragma warning restore 4014
                 }
+                else
+                {
+                    //Some posts might have no anchor and have thus been deleted. Ignore.
+                    form.Print(TextBoxChoice.TextBoxBottom, "Deleted post discovered. Ignoring.");
+                    postCount--;
+                }
             }
 
             //Node containing link for the next post-list
@@ -154,7 +171,7 @@ namespace LMB_Archivist_Formed
             if (next == null)
             {
                 postCount = docNode.QuerySelectorAll("span.lia-message-unread").Count();
-                form.Print(TextBoxChoice.TextBoxTop, "POST COUNT : " + postCount + "");
+                form.Print(TextBoxChoice.TextBoxTop, "Post count : " + postCount + "");
 
                 return;
             }
@@ -167,7 +184,7 @@ namespace LMB_Archivist_Formed
                 {
                     //Calculate final post count based on the final page.
                     postCount += docNode.QuerySelectorAll("span.lia-message-unread").Count() - 20;
-                    form.Print(TextBoxChoice.TextBoxTop, "FINAL POST COUNT : " + postCount);
+                    form.Print(TextBoxChoice.TextBoxTop, "Final post count : " + postCount);
 
                     return;
                 }
@@ -177,7 +194,7 @@ namespace LMB_Archivist_Formed
                 {
                     int.TryParse(docNode.QuerySelectorAll("[class^=lia-js-data-pageNum-]").Last().InnerHtml, out postCount);
                     postCount *= 20;
-                    form.Print(TextBoxChoice.TextBoxTop, "POST ESTIMATE : ~" + postCount);
+                    form.Print(TextBoxChoice.TextBoxTop, "Post count estimate : ~" + postCount);
                 }
             }
 
@@ -190,7 +207,7 @@ namespace LMB_Archivist_Formed
                     int pageNumber = 0;
                     Int32.TryParse(Regex.Match(cssClass, @"\d+$").Value, out pageNumber);
 
-                    form.Print(TextBoxChoice.TextBoxBottom, "GETTING POST PAGE NUMBER " + pageNumber);
+                    form.Print(TextBoxChoice.TextBoxBottom, "Getting post page number : " + pageNumber);
                 }
             }
 
@@ -213,14 +230,14 @@ namespace LMB_Archivist_Formed
 
             var postId = Regex.Match(url, @"m-p\/\d+").Value.Replace("m-p/", "");
 
-            form.Print(TextBoxChoice.TextBoxBottom, "ACQUIRED POST OF ID: " + postId);
+            form.Print(TextBoxChoice.TextBoxBottom, "Acquired post of ID : " + postId);
 
             //Node of post
             var post = docNode.QuerySelector("div.message-uid-" + postId);
 
             if (post == null)
             {
-                form.Print(TextBoxChoice.TextBoxBottom, "POST OF ID: " + postId + " REQUIRES LOGIN. CANNOT GET.");
+                form.Print(TextBoxChoice.TextBoxBottom, "Post of ID : " + postId + " requires login. Cannot get.");
                 incrementPostCounter();
                 return; //Post requires login. Ignore it.
             }
@@ -281,28 +298,21 @@ namespace LMB_Archivist_Formed
         }
 
         //Handle topic page.
-        private async void HandleTopicDocument(string url, bool cleanExtras = false)
+        private async void HandleTopicDocument(string url, TopicReadingState state)
         {
             topicDone = false;
 
             int pageNum = 1;
 
             //Logic for cleaning extra fluff in URI and getting a page number
-            var uri = new Uri(url);
-            var segments = uri.Segments;
-            var killSegments = false;       //True when fluff starts in URI
+            var segments = new Uri(url).Segments;
 
             //Walk through URI segments
             for (int i = 0; i < segments.Length; i++)
             {
-                if (segments[i] == "highlight/")
+                if (segments[i] == "page/")
                 {
-                    killSegments = true;
-                }
-                else if (segments[i] == "page/")
-                {
-                    killSegments = true;
-                    if (segments.Length > i && !cleanExtras)
+                    if (segments.Length > i)
                     {
                         if (int.TryParse(segments[i + 1], out pageNum))
                         {
@@ -310,15 +320,7 @@ namespace LMB_Archivist_Formed
                         }
                     }
                 }
-
-                //Kill uneeded segments only if we are cleaning the extra stuff.
-                if (killSegments && cleanExtras)
-                {
-                    segments[i] = "";
-                }
             }
-
-            url = uri.Scheme + "://" + uri.Host + String.Join("", segments);
 
             //Read the document from the request result
             var doc = new HtmlAgilityPack.HtmlDocument();   //Document
@@ -327,6 +329,34 @@ namespace LMB_Archivist_Formed
             webResponse.Close();
 
             var docNode = doc.DocumentNode; //Document Node
+            
+            //Number of pages
+            int pageCount = 0;
+            var pageNumNodes = docNode.QuerySelectorAll("[class^=lia-js-data-pageNum-]");
+            if (pageNumNodes.Count() > 0)
+            {
+                int.TryParse(pageNumNodes.Last().InnerHtml, out pageCount);
+
+                if(state == TopicReadingState.MustGoToFirst)
+                {
+                    if (docNode.QuerySelector("span.lia-js-data-pageNum-1") != null)
+                    {
+                        //This is the first page.
+                        state = TopicReadingState.IsFirst;
+                    }
+                    else
+                    {
+                        await Task.Run(() => HandleTopicDocument(
+                            docNode.QuerySelector("a.lia-js-data-pageNum-1").GetAttributeValue("href", ""),
+                            TopicReadingState.IsFirst));
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                pageCount = 1;
+            }
 
             var messageList = docNode.QuerySelector(".message-list");
 
@@ -365,15 +395,11 @@ namespace LMB_Archivist_Formed
                 }
             }
 
-            //Number of pages
-            int pageCount = 0;
-            int.TryParse(docNode.QuerySelectorAll("[class^=lia-js-data-pageNum-]").Last().InnerHtml, out pageCount);
-
             //Title of topic
             var title = docNode.QuerySelector(".custom-title").InnerHtml;
 
             //Logs
-            if (cleanExtras)
+            if (state == TopicReadingState.IsFirst)
             {
                 form.Print(TextBoxChoice.TextBoxTop, "Topic : " + title);
                 form.Print(TextBoxChoice.TextBoxTop, "Page Count : " + pageCount);
@@ -416,7 +442,9 @@ namespace LMB_Archivist_Formed
                 }
             }
 
-            await Task.Run(() => HandleTopicDocument(next.GetAttributeValue("href", "")));
+            await Task.Run(() => HandleTopicDocument(
+                next.GetAttributeValue("href", ""),
+                TopicReadingState.IsPastFirst));
         }
 
         //Increment the post counter. Should be called when a post task is done.
