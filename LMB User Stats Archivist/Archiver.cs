@@ -119,6 +119,16 @@ namespace LMB_User_Stats_Archivist
 
             if (docNode.QuerySelector(".lia-text error-description") == null)
             {
+                if(docNode.QuerySelector("div") == null)
+                {
+                    form.Print("Failed to get page for user : " + id + "; Retrying.");
+                    Thread.Sleep(5000);
+                    #pragma warning disable 4014
+                    Task.Run(() => UserRequest(id)).ConfigureAwait(false);
+                    #pragma warning restore 4014
+                    return;
+                }
+
                 var images = docNode.QuerySelectorAll("img");
 
                 var username = docNode.QuerySelector(".UserName").QuerySelector("span").InnerHtml;
