@@ -105,13 +105,29 @@ namespace LMB_User_Stats_Archivist
                 doc.Load(webResponse.GetResponseStream());
                 webResponse.Close();
             }
-            catch
+            catch(Exception e)
             {
-                form.Print("Failed to get page for user : " + id + "; Retrying.");
-                Thread.Sleep(5000);
-                #pragma warning disable 4014
-                Task.Run(() => UserRequest(id)).ConfigureAwait(false);
-                #pragma warning restore 4014
+                var number = Regex.Match(e.Message, "\\d{3}");
+
+                form.Print("User ID " + id + " failed! : (" + number + ") User may not exist.");
+
+                //This is a copy of what's at the bottom of this method but I'm really tired and running out of cares.
+                counterFinished++;
+                counter++;
+
+                if (counter <= end)
+                {
+                    #pragma warning disable 4014
+                    Task.Run(() => UserRequest(counter)).ConfigureAwait(false);
+                    #pragma warning restore 4014
+                }
+
+                if (counterFinished > end)
+                {
+                    form.Print("Task complete!");
+                    form.Enable();
+                }
+
                 return;
             }
 
