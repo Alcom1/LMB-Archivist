@@ -383,7 +383,7 @@ namespace LMB_Archivist_Formed
 
                 string imageFileLocation = SAVE_IMAGE_LOCATION + Path.GetFileName(src);
 
-                image.SetAttributeValue("src", "../" + imageFileLocation);
+                image.SetAttributeValue("src", "../../" + imageFileLocation);
 
                 if (!File.Exists("output/" + imageFileLocation))
                 {
@@ -410,10 +410,10 @@ namespace LMB_Archivist_Formed
             //Node containing link for the next post-list
             var next = docNode.QuerySelector(".lia-paging-full-left-position");
 
-            Directory.CreateDirectory(SAVE_LOCATION + SAVE_TOPIC_LOCATION);
+            Directory.CreateDirectory(SAVE_LOCATION + SAVE_TOPIC_LOCATION + legalizeFilePath(title) + "/");
 
             //Post File Name
-            string topicFileName = legalizeFilePath(title + "_" + pageNum) + ".html";
+            string topicFileName = legalizeFilePath(title) + "/" + legalizeFilePath(title + "_" + pageNum) + ".html";
 
             //Save page document
             var output = new HtmlAgilityPack.HtmlDocument();
