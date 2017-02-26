@@ -91,6 +91,8 @@ namespace LMB_Archivist_Formed
         //
         public void SetFinished()
         {
+            form.NewLine(TextBoxChoice.TextBoxBottom);
+            form.Print(TextBoxChoice.TextBoxBottom, "Task Completed!");
             RunTask();
         }
 
