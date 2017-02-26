@@ -15,7 +15,8 @@ namespace LMB_Archivist_Formed
     {
         MustGoToFirst,
         IsFirst,
-        IsPastFirst
+        IsPastFirst,
+        IsSkipping
     }
 
     class Archiver
@@ -362,6 +363,31 @@ namespace LMB_Archivist_Formed
 
             //Modify post document for exporting
             var quilts = messageList.QuerySelectorAll("div.lia-quilt-column-main-right");
+
+            //Skip pages that we fail to get
+            if (messageList == null)
+            {
+                int urlNum;
+
+                if(state == TopicReadingState.IsSkipping)
+                {
+                    topicDone = true;
+                    CheckSetFinished();
+                    return;
+                }
+
+                if(int.TryParse(Regex.Match(url, "\\d+$").Value, out urlNum))
+                {
+                    urlNum++;
+                    form.Print(TextBoxChoice.TextBoxBottom, "Skipping unreadable page : " + pageNum);
+
+                    await Task.Run(() => HandleTopicDocument(
+                        Regex.Replace(url, "\\d+$", urlNum.ToString()),
+                        TopicReadingState.IsSkipping));
+                    return;
+                }
+            }
+
             foreach (var quilt in quilts)
             {
                 quilt.QuerySelector("div.lia-quilt-column-alley")
@@ -384,7 +410,7 @@ namespace LMB_Archivist_Formed
                 string imageFileLocation = SAVE_IMAGE_LOCATION + Path.GetFileName(src);
 
                 image.SetAttributeValue("src", "../../" + imageFileLocation);
-
+                 
                 if (!File.Exists("output/" + imageFileLocation))
                 {
                     imgCount++;
