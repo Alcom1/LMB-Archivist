@@ -1,10 +1,10 @@
 var jammers = document.getElementsByClassName("lia-spoiler-link");
 var targets = document.getElementsByClassName("lia-spoiler-content");
 
-var jamToggle = function(subJammer, subTarget) {
+var jamToggle = function (subJammer, subTarget) {
     var classListJammer = subJammer.classList;
-    
-    if(classListJammer.contains("open")) {
+
+    if (classListJammer.contains("open")) {
         classListJammer.remove("open");
         subTarget.style.cssText = '';
     }
@@ -14,13 +14,15 @@ var jamToggle = function(subJammer, subTarget) {
     }
 }
 
-for(var i = 0; i < jammers.length; i++) {
+for (var i = 0; i < jammers.length; i++) {
     var jammer = jammers[i];
-    jammer.onclick = (function() {
+    jammer.onclick = (function () {
         var subJammer = jammers[i];
         var subTarget = targets[i];
 
-        return function() { 
+        subJammer.removeAttribute("href");
+
+        return function () {
             jamToggle(subJammer, subTarget);
         }
     })();

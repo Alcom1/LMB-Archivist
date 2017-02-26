@@ -21,12 +21,9 @@ C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\LMB Archivi
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\LMB Archivist.pdb
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Fizzler.Systems.HtmlAgilityPack.dll
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\HtmlAgilityPack.dll
-C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Fizzler.dll
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Fizzler.Systems.HtmlAgilityPack.xml
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\HtmlAgilityPack.pdb
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\HtmlAgilityPack.xml
-C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Fizzler.xml
-C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\obj\Debug\LMB Archivist.csprojResolveAssemblyReference.cache
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\avatar-author-bg.png
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\blue-button-bg.png
 C:\Users\Alcom\Desktop\Dev\Git\LMB-Archivist\LMB Archivist\bin\Debug\Output\Css\body-bg.png
