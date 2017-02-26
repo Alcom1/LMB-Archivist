@@ -112,6 +112,10 @@
     <EmbeddedResource Include="output\css\overview.css" />
     <EmbeddedResource Include="output\css\speech-triangle-left.png" />
     <EmbeddedResource Include="assets\topic.html" />
+    <EmbeddedResource Include="output\css\dropdown-bg.png" />
+    <EmbeddedResource Include="output\css\icon_toggle_closed.png" />
+    <EmbeddedResource Include="output\css\icon_toggle_open.png" />
+    <EmbeddedResource Include="output\css\jammer.js" />
     <Content Include="smile.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

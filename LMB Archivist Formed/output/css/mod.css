@@ -14,3 +14,11 @@ body {
 .lia-message-actions.lia-component-actions, .lia-message-options {
     display: none;
 }
+
+#lia-body .lia-content .lia-spoiler-container .lia-spoiler-link {
+    background: url(icon_toggle_closed.png) no-repeat 0 50%;
+}
+
+#lia-body .lia-content .lia-spoiler-container .lia-spoiler-link.open {
+    background: url(icon_toggle_open.png) no-repeat 0 50%;
+}
