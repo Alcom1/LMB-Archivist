@@ -106,6 +106,42 @@ namespace LMB_Archivist_Formed
         void Form1_DragDrop(object sender, DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (files.Count() > 0)
+            {
+                string[] lines = File.ReadAllLines(files[0]);
+
+                foreach (string line in lines)
+                {
+                    if (Regex.IsMatch(line, @"^\d+$"))
+                    {
+                        this.NewLine(TextBoxChoice.TextBoxTop);
+                        this.Print(TextBoxChoice.TextBoxTop, "TASK ADDED : Archive User ID : " + line);
+                        manager.AddTask(ArchiveOptionState.SaveUserPosts, line);
+                        this.button_archive.Enabled = true;
+                    }
+                    else
+                    {
+                        var lineUrl = line;
+
+                        if (lineUrl.StartsWith("community.lego.com/t5/"))
+                        {
+                            lineUrl = "https://" + line;
+                        }
+                        if (lineUrl.StartsWith("https://community.lego.com/t5/"))
+                        {
+                            this.NewLine(TextBoxChoice.TextBoxTop);
+                            this.Print(TextBoxChoice.TextBoxTop, "TASK ADDED : Archive Topic : " + lineUrl);
+                            manager.AddTask(ArchiveOptionState.SaveTopics, lineUrl);
+                            this.button_archive.Enabled = true;
+                        }
+                        else
+                        {
+                            this.Print(TextBoxChoice.TextBoxTop, "INVALID TEXT FILE LINE: " + lineUrl);
+                        }
+                    }
+                }
+            }
         }
 
         //
