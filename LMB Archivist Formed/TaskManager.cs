@@ -53,7 +53,7 @@ namespace LMB_Archivist_Formed
                             form.NewLine(TextBoxChoice.TextBoxTop);
                             form.Print(TextBoxChoice.TextBoxTop, "TASK START : Save User Posts for ID : " + task.target);
                             form.NewLine(TextBoxChoice.TextBoxBottom);
-                            form.Print(TextBoxChoice.TextBoxBottom, "TASK START : Save Topic for URL : " + task.target);
+                            form.Print(TextBoxChoice.TextBoxBottom, "TASK START : Save User Posts for ID : " + task.target);
                             archiver.StartUserPostArchiving(targetValue);
                         }
                         else
